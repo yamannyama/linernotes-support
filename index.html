@@ -47,9 +47,8 @@
   ],
   "offers": [
     { "@type": "Offer", "name": "無料", "price": "0", "priceCurrency": "JPY", "description": "毎日の日記・AI下書き・自動記録・エクスポート" },
-    { "@type": "Offer", "name": "Pro 年額", "price": "5000", "priceCurrency": "JPY", "description": "14日間無料。週次レター・ハイライト全編・今夜の一枚・家族モード" },
-    { "@type": "Offer", "name": "Pro 月額", "price": "600", "priceCurrency": "JPY", "description": "7日間無料。いつでも解約" },
-    { "@type": "Offer", "name": "Pro 永年", "price": "19800", "priceCurrency": "JPY", "description": "買い切り。すべてのPro機能をずっと" }
+    { "@type": "Offer", "name": "Pro 年額", "price": "5000", "priceCurrency": "JPY", "description": "14日間無料。クラウドAIで週次レター・ハイライト全編・フルカラーの今夜の一枚・家族モード" },
+    { "@type": "Offer", "name": "Pro 月額", "price": "600", "priceCurrency": "JPY", "description": "7日間無料。すべてのPro機能(クラウドAI)。いつでも解約" }
   ]
 }
 </script>
@@ -164,7 +163,7 @@ h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.08em;line-he
 /* ---------- 料金 ---------- */
 .free-line{text-align:center;margin-top:40px;font-size:clamp(16px,2.4vw,21px);letter-spacing:.1em}
 .free-line b{color:var(--copper-l);font-weight:600}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2.4vw,24px);margin-top:44px}
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2.4vw,24px);margin-top:44px;max-width:620px;margin-inline:auto}
 .plan{border:1px solid var(--hairline);border-radius:20px;padding:28px 24px;background:rgba(41,33,26,.35);text-align:center;position:relative}
 .plan.reco{border-color:var(--copper);background:linear-gradient(180deg,rgba(201,143,95,.12),rgba(41,33,26,.4))}
 .badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--copper-l);color:#241708;
@@ -292,7 +291,7 @@ footer a:hover{color:var(--copper-l)}
     <div class="feature reveal">
       <div class="txt">
         <h3>食卓の会話が、<br>わが家の日記になる。</h3>
-        <p>家族の声を登録して、食卓にiPhoneを置いて話すだけ。誰が話したかを聞き分けて、家族の記録が残ります。音声は端末の外に出ません。</p>
+        <p>食卓にiPhoneを置いて話すだけ。会話がそのまま文字起こしされ、あとから話し手を選んで、わが家の日記として残せます。音声は端末の外に出ません。</p>
         <div class="quote">ファミリー共有対応。ひとつの購読で、家族全員。</div>
       </div>
       <div class="img"><img src="assets/08-family.png" alt="家族モードの画面" loading="lazy"></div>
@@ -314,12 +313,22 @@ footer a:hover{color:var(--copper-l)}
       </div>
       <div class="pillar reveal">
         <h3>学習には使わない</h3>
-        <p>無料プランのAIは端末内で動作。Proで外部AIを使う場合も、あなたの記録がAIの学習に使われることは一切ありません。</p>
+        <p>無料プランのAIは端末内で動作。定期購読で高品質なクラウドAIを使う場合も、あなたの記録がAIの学習に使われることは一切ありません。</p>
       </div>
       <div class="pillar reveal">
         <h3>ストリークなし</h3>
         <p>連続記録の数字も、「◯日サボりました」の通知もありません。休んでも、失われるものは何もありません。</p>
       </div>
+    </div>
+    <div class="reveal" style="margin-top:34px;max-width:760px;margin-inline:auto;border:1px solid var(--hairline);border-radius:20px;padding:clamp(24px,3vw,32px);background:rgba(41,33,26,.35)">
+      <h3 style="font-size:16.5px;letter-spacing:.1em;color:var(--copper-l);margin-bottom:14px">外部AIを使うときも、プライバシーを最優先に</h3>
+      <p style="color:var(--latte);font-size:13.5px;line-height:2">定期購読で高品質なクラウドAIを使うときは、日記のテキストだけが開発者のサーバーを経由して外部AIに渡ります(写真そのものやヘルスケアの生データは送りません)。ここでも、あなたのプライバシーを何より大切に設計しています。</p>
+      <ul style="list-style:none;margin-top:18px;color:var(--latte);font-size:13px;line-height:2.1">
+        <li>送られたテキストが<b style="color:var(--cream)">AIの学習に使われることは一切ありません</b>。</li>
+        <li>サーバーは<b style="color:var(--cream)">中継するだけで、日記の内容を保存も記録もしません</b>。開発者の手元に日記は残らず、あとから内容を読み返す手段もありません(保持するのは費用管理のための集計値のみ)。</li>
+        <li>認証にはApp Storeの購入情報だけを使うため、<b style="color:var(--cream)">あなたの氏名やアカウントが外部AIにも開発者にも渡ることはありません</b>(匿名で処理されます)。</li>
+      </ul>
+      <p style="color:var(--latte);font-size:13.5px;line-height:2;margin-top:18px">私たちはプライバシー保護を最優先に考えています。どうぞ安心して、本音のまま残してください。</p>
     </div>
   </div>
 </section>
@@ -338,22 +347,16 @@ footer a:hover{color:var(--copper-l)}
         <div class="name">年額</div>
         <div class="price">¥5,000<small> /年</small></div>
         <div class="note">14日間無料・月あたり¥417</div>
-        <ul><li>週次レター 毎週</li><li>ハイライト全編</li><li>今夜の一枚・家族モード</li></ul>
+        <ul><li>クラウドAIで高品質</li><li>週次レター 毎週・ハイライト全編</li><li>フルカラーの「その日の一枚」・家族モード</li></ul>
       </div>
       <div class="plan reveal">
         <div class="name">月額</div>
         <div class="price">¥600<small> /月</small></div>
         <div class="note">7日間無料・いつでも解約</div>
-        <ul><li>すべてのPro機能</li><li>気軽にはじめる</li></ul>
-      </div>
-      <div class="plan reveal">
-        <div class="name">永年</div>
-        <div class="price">¥19,800<small> 買い切り</small></div>
-        <div class="note">サブスク不要。一度きり</div>
-        <ul><li>すべてのPro機能をずっと</li><li>ファミリー共有対応</li></ul>
+        <ul><li>すべてのPro機能(クラウドAI)</li><li>気軽にはじめる</li></ul>
       </div>
     </div>
-    <p class="pro-note reveal">Proは「記録を振り返りに変える」機能セット。日記そのものは、無料のまま使い続けられます。</p>
+    <p class="pro-note reveal">Proは「記録を振り返りに変える」機能セット。日記そのものは、無料のまま使い続けられます。定期購読はいつでも解約できます。</p>
   </div>
 </section>
 
@@ -380,6 +383,10 @@ footer a:hover{color:var(--copper-l)}
       <details>
         <summary>途中でやめてしまいそうです。</summary>
         <p>大丈夫です。休んでいる間も自動記録は続いていて、戻ってきた日に「その間の記録」がちゃんと待っています。ストリークがないので、失うものは何もありません。</p>
+      </details>
+      <details>
+        <summary>無料と定期購読(Pro)は何が違いますか?</summary>
+        <p>無料プランでも、毎日の日記・受動データからのAI下書き・自動記録・エクスポートがずっと使えます。AIはお使いのiPhoneの中で動作します。定期購読(月額¥600・年額¥5,000)にすると、より高品質なクラウドAIで、週次AIレター・フルカラーの「その日の一枚」・ハイライト全編・今夜の一枚・家族モードが使えます。いずれの場合も日記の内容がAIの学習に使われることはありません。定期購読はいつでも解約できます。</p>
       </details>
     </div>
   </div>
