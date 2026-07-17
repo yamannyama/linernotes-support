@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support | Liner Notes</title>
+<link rel="canonical" href="https://linernotes.aves.ltd/en/support.html">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/support.html">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/support.html">
+<style>
+  :root {
+    --ink: #3a3733;
+    --ink-soft: #6b665e;
+    --paper: #faf8f4;
+    --line: #e5e0d6;
+    --accent: #7a6f5d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "New York", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    line-height: 1.8;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .app-name {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .lang {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .about {
+    margin-bottom: 48px;
+    font-size: 15.5px;
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-left: 12px;
+    border-left: 3px solid var(--accent);
+    letter-spacing: 0.02em;
+  }
+  details {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  summary {
+    padding: 16px 18px;
+    font-weight: 600;
+    font-size: 15.5px;
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 40px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: "+";
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 400;
+  }
+  details[open] summary::after { content: "−"; }
+  .answer {
+    padding: 0 18px 16px;
+    font-size: 15px;
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+  }
+  .answer p { margin-bottom: 10px; }
+  .answer p:last-child { margin-bottom: 0; }
+  .answer ul, .answer ol { margin: 0 0 10px 1.4em; }
+  .answer li { margin-bottom: 4px; }
+  .caution {
+    font-size: 14px;
+    background: #f6ede4;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin: 10px 0;
+  }
+  .contact {
+    margin-top: 48px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .contact h2 { margin-bottom: 12px; }
+  a { color: var(--accent); }
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 480px) {
+    body { font-size: 15px; }
+    .wrap { padding: 32px 18px 64px; }
+    h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="app-name">Liner Notes</div>
+  <h1>Support</h1>
+  <div class="lang"><a href="../support.html" hreflang="ja" lang="ja">日本語</a></div>
+</header>
+
+<div class="about">
+  <p>Liner Notes is a diary that continues even when you don't write. From the traces of your day — places, photos, sleep, steps, plans — AI quietly prepares a draft of your diary. All of it is stored on your device alone, and the developer never collects it. Our aim is to sit beside your days, quietly and honestly.</p>
+</div>
+
+<h2>Frequently asked questions</h2>
+
+<details>
+  <summary>What happens if I don't grant a permission (location, photos, health)?</summary>
+  <div class="answer">
+    <p>The app works fine without it. A declined permission simply means that material isn't used in your drafts.</p>
+    <p>For example, without location access your places aren't recorded, but drafts are still built from photos, plans, and the rest. Decline everything and it still works as a hand-written diary. You can change any permission later in the Settings app.</p>
+  </div>
+</details>
+
+<details>
+  <summary>Where does the AI run? Is my data sent anywhere?</summary>
+  <div class="answer">
+    <p><strong>On the free plan, the AI runs on your device.</strong> In that case, your data never leaves it.</p>
+    <p><strong>Pro (the subscription) uses an external AI service for more natural writing.</strong> When generating drafts, questions, and weekly letters, text related to your diary is sent off the device. However, that text is <strong>never used to train AI and is never stored by the developer</strong>. Authentication uses only your App Store purchase, so <strong>your name and account are never shared with the external AI</strong>. Nothing beyond diary text — no photos themselves, no raw health data — is ever sent.</p>
+    <p>See the <a href="./privacy.html">Privacy Policy</a> for details.</p>
+  </div>
+</details>
+
+<details>
+  <summary>Where is my diary stored?</summary>
+  <div class="answer">
+    <p>Entirely on your iPhone. The developer (AVES ltd.) never stores your diary or reads its contents.</p>
+    <p>See the <a href="./privacy.html">Privacy Policy</a> for details.</p>
+  </div>
+</details>
+
+<details>
+  <summary>I'm switching phones. What should I do with my data?</summary>
+  <div class="answer">
+    <p>Because data is stored only on the device, <strong>before switching, export your diary from the Settings tab (Markdown)</strong> and move the file to your new device via the Files app or AirDrop.</p>
+    <div class="caution">Caution: if you delete the app from your old device without exporting, your diary data is lost and cannot be recovered. Please export first when switching phones.</div>
+    <p>There is currently no import feature that reads the exported file back into the app on a new device. Please keep the exported Markdown file as the archive of your diary so far.</p>
+  </div>
+</details>
+
+<details>
+  <summary>How do I cancel the Pro subscription?</summary>
+  <div class="answer">
+    <p>Subscriptions run through Apple (the App Store), so cancellation happens in Apple's settings.</p>
+    <ol>
+      <li>Open the Settings app on your iPhone</li>
+      <li>Tap your name at the top → "Subscriptions"</li>
+      <li>Choose "Liner Notes" and tap "Cancel Subscription"</li>
+    </ol>
+    <p>After canceling, Pro remains available until the end of the current billing period. Your diary data stays on your device after cancellation.</p>
+  </div>
+</details>
+
+<details>
+  <summary>How does Family Mode work?</summary>
+  <div class="answer">
+    <p>Family Mode is a Pro feature that turns table conversation into the family's diary.</p>
+    <ol>
+      <li>Set your iPhone on the table and talk about the day. The conversation is transcribed on the spot</li>
+      <li>Afterward, tag each line with who said it</li>
+      <li>The conversation is saved on the device as the family's diary</li>
+    </ol>
+    <p>Audio never leaves the device. And with Apple Family Sharing turned on, one subscription covers the whole family.</p>
+  </div>
+</details>
+
+<details>
+  <summary>My weekly AI letter isn't arriving</summary>
+  <div class="answer">
+    <p>Please check the following.</p>
+    <ul>
+      <li>The weekly letter uses cloud AI, so it must be <strong>explicitly turned on (opted into) inside the app</strong></li>
+      <li>Check that notifications for Liner Notes are allowed under iPhone Settings → Notifications</li>
+      <li>Letters aren't automatic — <strong>create them from "Write this week's letter" in the Letters tab</strong> (the week needs at least one day of records)</li>
+      <li>Your first letter is free to try. From the second letter on, a Pro subscription (monthly or yearly) is required</li>
+    </ul>
+    <p>If it still doesn't arrive, please contact us below.</p>
+  </div>
+</details>
+
+<div class="contact">
+  <h2>Contact</h2>
+  <p>Questions about how things work, bug reports, requests — anything is welcome. The developer replies personally.</p>
+  <p>
+    AVES ltd.<br>
+    Email: <a href="mailto:info@aves.ltd">info@aves.ltd</a>
+  </p>
+</div>
+
+<footer>
+  &copy; 2026 AVES ltd. — Liner Notes<br>
+  <a href="./privacy.html">Privacy Policy</a> · <a href="../support.html" hreflang="ja" lang="ja">日本語</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liner Notes | The AI diary that keeps your days even when you don't write</title>
+<meta name="description" content="Liner Notes is an iOS diary that drafts your day for you — from places, photos, sleep, steps, and plans. Sixty seconds at night, one tap to approve. Even on days you don't write, the record continues. Stored on your device, private by design.">
+<meta name="keywords" content="Liner Notes,AI diary,diary app,journaling,journal app,life log,reflection,health,sleep tracking,mood tracking,automatic diary">
+<meta name="author" content="AVES ltd.">
+<link rel="canonical" href="https://linernotes.aves.ltd/en/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/">
+<link rel="alternate" hreflang="x-default" href="https://linernotes.aves.ltd/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="apple-mobile-web-app-title" content="Liner Notes">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="Liner Notes | The AI diary that keeps your days even when you don't write">
+<meta property="og:description" content="AI drafts your day from passive data. Sixty seconds at night, one tap to approve. A diary that continues even when you don't write.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://linernotes.aves.ltd/en/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Liner Notes | The AI diary that keeps your days even when you don't write">
+<meta name="twitter:description" content="AI drafts your day from passive data. Sixty seconds at night, one tap to approve.">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+<link rel="apple-touch-icon" href="../assets/favicon-180.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Liner Notes",
+  "applicationCategory": "LifestyleApplication",
+  "applicationSubCategory": "Diary / Journaling",
+  "operatingSystem": "iOS 18.0 or later",
+  "description": "A diary app that drafts your day from passive data — places, photos, sleep, steps, and plans — so approving takes sixty seconds at night. Even on days you don't write, the record continues. Diary data stays on-device and is never used for AI training.",
+  "inLanguage": "en",
+  "author": { "@type": "Organization", "name": "AVES ltd." },
+  "publisher": { "@type": "Organization", "name": "AVES ltd." },
+  "featureList": [
+    "AI drafts your diary from passive data (places, photos, sleep, steps, plans)",
+    "Speak one line — voice or text — and it becomes your entry",
+    "Health records and mood-trend analysis",
+    "Weekly AI letter reflecting on your week",
+    "Family Mode: table conversations become the family's diary",
+    "On-device storage, no AI training, no streaks"
+  ],
+  "offers": [
+    { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "JPY", "description": "Daily diary, AI drafts, automatic records, and export" },
+    { "@type": "Offer", "name": "Pro Yearly", "price": "5000", "priceCurrency": "JPY", "description": "14 days free. Cloud AI for weekly letters, full highlights, the full-color Day's Picture, and Family Mode" },
+    { "@type": "Offer", "name": "Pro Monthly", "price": "600", "priceCurrency": "JPY", "description": "7 days free. All Pro features (cloud AI). Cancel anytime" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Do I really not have to write?", "acceptedAnswer": { "@type": "Answer", "text": "Really. AI builds a draft of your day from passive data — location, photos, sleep, steps, plans. You read it, fix what you like, and approve. On days you'd rather talk, one line into the mic is plenty." } },
+    { "@type": "Question", "name": "Can anyone see my diary?", "acceptedAnswer": { "@type": "Answer", "text": "Your diary is stored on your device. The developer never stores or reads your entries, and they are never used for AI training." } },
+    { "@type": "Question", "name": "Can I stay on the free plan?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The daily diary, AI drafts, automatic records, and export are free forever. Your first weekly letter is also free to try." } },
+    { "@type": "Question", "name": "I'm worried I'll quit halfway.", "acceptedAnswer": { "@type": "Answer", "text": "While you're away, the automatic record keeps going — and it's waiting for you the day you come back. There are no streaks, so there is nothing to lose." } }
+  ]
+}
+</script>
+<style>
+:root{
+  --night:#151009; --espresso:#1E1813; --surface:#29211A; --raised:#332920;
+  --cream:#EAE0CF; --latte:#A3947F; --copper:#C98F5F; --copper-l:#E6B98A; --copper-d:#845733;
+  --hairline:rgba(201,143,95,.26);
+  --mincho:"New York","Iowan Old Style",Georgia,"Times New Roman",serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+
+/* ---------- 共通 ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0 0}
+.divider::before,.divider::after{content:"";height:1px;flex:1;background:var(--hairline)}
+.divider span{width:6px;height:6px;background:var(--copper);transform:rotate(45deg)}
+h2{font-size:clamp(26px,4.6vw,40px);font-weight:600;letter-spacing:.02em;line-height:1.5}
+.sub{color:var(--latte);font-size:clamp(13.5px,1.7vw,15.5px)}
+section{padding:clamp(72px,12vw,130px) 0}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+
+/* ---------- ナビ ---------- */
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;transition:background .4s ease,backdrop-filter .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-side{display:flex;align-items:center;gap:12px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);
+  padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.nav-lang{font-size:12px;letter-spacing:.14em;color:var(--latte)}
+.nav-lang:hover{color:var(--copper-l)}
+
+/* ---------- ヒーロー ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.82)}
+.hero::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(21,16,9,.55) 0%,rgba(21,16,9,.18) 40%,rgba(21,16,9,.82) 100%)}
+.hero-inner{position:relative;z-index:2;padding:0 24px;width:min(760px,92vw)}
+.brandline{font-size:13px;letter-spacing:.42em;color:var(--copper-l);margin-bottom:20px;padding-left:.42em;font-weight:600}
+h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.02em;line-height:1.5;text-shadow:0 3px 30px rgba(0,0,0,.5)}
+.hero p.lead{margin-top:22px;color:var(--cream);opacity:.85;font-size:clamp(14px,2vw,17px);letter-spacing:.02em}
+.cta-row{margin-top:40px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));
+  color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;
+  box-shadow:0 10px 34px rgba(201,143,95,.28);transition:transform .25s,box-shadow .25s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(201,143,95,.4)}
+.cta small{display:block;font-size:10px;letter-spacing:.16em;font-weight:400}
+.cta-note{font-size:12px;color:var(--latte);letter-spacing:.08em}
+
+/* ---------- 共感ステートメント ---------- */
+.statement{text-align:center;max-width:820px;margin:0 auto}
+.statement h2{font-size:clamp(24px,4.2vw,38px)}
+.statement .big{color:var(--copper-l)}
+.statement p{margin-top:26px;color:var(--latte);font-size:clamp(13.5px,1.8vw,16px)}
+
+/* ---------- 3ステップ ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,34px);margin-top:56px}
+.step{background:linear-gradient(180deg,var(--surface),rgba(41,33,26,.4));border:1px solid var(--hairline);
+  border-radius:22px;padding:26px 22px 30px;text-align:center;position:relative}
+.step .num{font-size:11px;letter-spacing:.3em;color:var(--copper)}
+.step h3{font-size:18px;margin:10px 0 8px;letter-spacing:.06em}
+.step p{font-size:13px;color:var(--latte);line-height:1.9}
+.phone{margin:22px auto 0;width:min(230px,72%);border-radius:26px;overflow:hidden;
+  border:1px solid rgba(201,143,95,.35);box-shadow:0 18px 50px rgba(0,0,0,.55)}
+@media (max-width:760px){.steps{grid-template-columns:1fr;max-width:420px;margin-inline:auto}}
+
+/* ---------- 交互セクション ---------- */
+.feature{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,6vw,80px);align-items:center;margin-top:70px}
+.feature:first-of-type{margin-top:56px}
+.feature.rev{grid-template-columns:.95fr 1.05fr}
+.feature.rev .txt{order:2}.feature.rev .img{order:1}
+.feature h3{font-size:clamp(21px,3vw,28px);letter-spacing:.03em;line-height:1.6}
+.feature p{margin-top:16px;color:var(--latte);font-size:14.5px}
+.feature .img img{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:min(340px,100%);margin:0 auto}
+.feature .quote{margin-top:18px;padding:14px 18px;border-left:2px solid var(--copper);background:rgba(201,143,95,.06);
+  font-size:13px;color:var(--cream);opacity:.9;border-radius:0 12px 12px 0}
+@media (max-width:760px){.feature,.feature.rev{grid-template-columns:1fr}.feature.rev .txt{order:1}.feature.rev .img{order:2}.feature .img img{width:min(300px,86%)}}
+
+/* ---------- プライバシー ---------- */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,22px);margin-top:52px}
+@media (max-width:940px){.pillars{grid-template-columns:repeat(2,1fr)}}
+.pillar{border:1px solid var(--hairline);border-radius:20px;padding:30px 24px;background:rgba(41,33,26,.35);text-align:center}
+.pillar .glyph{font-size:26px;color:var(--copper-l)}
+.pillar h3{margin:12px 0 8px;font-size:16.5px;letter-spacing:.08em}
+.pillar p{font-size:12.5px;color:var(--latte)}
+@media (max-width:760px){.pillars{grid-template-columns:1fr;max-width:420px;margin-inline:auto}}
+
+/* ---------- 料金 ---------- */
+.free-line{text-align:center;margin-top:40px;font-size:clamp(16px,2.4vw,21px);letter-spacing:.04em}
+.free-line b{color:var(--copper-l);font-weight:600}
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2.4vw,24px);margin-top:44px;max-width:620px;margin-inline:auto}
+.plan{border:1px solid var(--hairline);border-radius:20px;padding:28px 24px;background:rgba(41,33,26,.35);text-align:center;position:relative}
+.plan.reco{border-color:var(--copper);background:linear-gradient(180deg,rgba(201,143,95,.12),rgba(41,33,26,.4))}
+.badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--copper-l);color:#241708;
+  font-size:10.5px;letter-spacing:.18em;padding:4px 14px;border-radius:99px;font-weight:600}
+.plan .name{font-size:13px;letter-spacing:.24em;color:var(--latte)}
+.plan .price{font-size:clamp(26px,3.4vw,34px);margin:10px 0 2px;color:var(--cream)}
+.plan .price small{font-size:13px;color:var(--latte)}
+.plan .note{font-size:11.5px;color:var(--copper-l);letter-spacing:.06em}
+.plan ul{list-style:none;margin-top:16px;font-size:12px;color:var(--latte);line-height:2.1}
+.pro-note{text-align:center;margin-top:26px;font-size:12px;color:var(--latte)}
+@media (max-width:760px){.plans{grid-template-columns:1fr;max-width:400px;margin-inline:auto}}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:760px;margin:48px auto 0}
+details{border-bottom:1px solid var(--hairline);padding:20px 6px}
+summary{cursor:pointer;font-size:15px;letter-spacing:.03em;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--copper);font-size:20px;transition:transform .3s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin-top:14px;font-size:13.5px;color:var(--latte)}
+
+/* ---------- 締めCTA・フッター ---------- */
+.final{position:relative;text-align:center;overflow:hidden}
+.final .moon{width:120px;height:120px;margin:0 auto 30px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#F4EAD5,#E3D3B0 55%,#B9A379);
+  box-shadow:0 0 90px rgba(234,224,207,.25),inset -14px -16px 34px rgba(132,87,51,.35)}
+.final h2{font-size:clamp(24px,4.4vw,38px)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="Global">
+  <a class="brand" href="#top"><img src="../assets/icon.png" alt="Liner Notes icon" width="30" height="30">Liner Notes</a>
+  <div class="nav-side">
+    <a class="nav-lang" href="../" hreflang="ja" lang="ja">日本語</a>
+    <a class="nav-cta" href="#get">Get the app</a>
+  </div>
+</nav>
+
+<!-- ヒーロー -->
+<header class="hero" id="top">
+  <video autoplay muted loop playsinline poster="../assets/hero-poster.jpg" aria-hidden="true">
+    <source src="../assets/hero-loop.webm" type="video/webm">
+    <source src="../assets/hero-loop.mp4" type="video/mp4">
+  </video>
+  <div class="hero-inner">
+    <p class="brandline">Liner Notes</p>
+    <h1>Even when you don't write,<br>today is kept.</h1>
+    <p class="lead">From your places, photos, sleep, steps, and plans, AI drafts your day.<br>Sixty seconds at night, one tap to approve. That's the whole diary.</p>
+    <div class="cta-row">
+      <a class="cta" href="#get" id="hero-cta">Get the app</a>
+      <span class="cta-note">The daily diary and automatic records are free, always.</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- 共感 -->
+<section>
+  <div class="wrap statement reveal">
+    <div class="divider" aria-hidden="true"><span></span></div>
+    <h2 style="margin-top:34px"><span class="big">75%</span> of people who quit journaling<br>didn't lack willpower.</h2>
+    <p>"I don't know what to write." "I missed a few days, so it's ruined."<br>
+    The real reasons are blank-page pressure and guilt — in other words, a design problem.<br>
+    So Liner Notes is built to <b style="color:var(--copper-l)">keep the record even when you don't write</b>.</p>
+  </div>
+</section>
+
+<!-- プライバシー -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="statement reveal">
+      <div class="divider" aria-hidden="true"><span></span></div>
+      <h2 style="margin-top:34px">Your diary<br>belongs to you.</h2>
+      <p class="sub" style="margin-top:18px">Not left on someone's server — kept in your own hands.<br>So you can write the truth, with no one looking over your shoulder.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar reveal">
+        <h3>No account needed</h3>
+        <p>No email, no password. Nothing to sign up for — it starts working the day you open it.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>On your device, yours alone</h3>
+        <p>Your diary and its passive records live on your iPhone. Nothing is uploaded, and no one but you can read it.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>Export to Markdown</h3>
+        <p>Take the full text of your diary — automatic records included — as plain text, anytime, openable in any app. No lock-in: files you own, readable ten years from now.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3ステップ -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="statement reveal">
+      <div class="divider" aria-hidden="true"><span></span></div>
+      <h2 style="margin-top:34px">Sixty seconds at night.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="num">STEP 01</span>
+        <h3>Just speak</h3>
+        <p>One question, drawn from your day's data.<br>One line into the mic is plenty.</p>
+        <div class="phone"><img src="../assets/01-question-en.png" alt="Today's question and voice input screen" loading="lazy" onerror="this.src='../assets/01-question.png'"></div>
+      </div>
+      <div class="step reveal">
+        <span class="num">STEP 02</span>
+        <h3>AI drafts it</h3>
+        <p>Places, photos, sleep, steps, plans.<br>Your day, already in sentences.</p>
+        <div class="phone"><img src="../assets/02-draft-en.png" alt="AI-generated diary draft screen" loading="lazy" onerror="this.src='../assets/02-draft.png'"></div>
+      </div>
+      <div class="step reveal">
+        <span class="num">STEP 03</span>
+        <h3>Approve, and it's done</h3>
+        <p>Read it, fix what you like, one tap.<br>Today's diary, quietly kept.</p>
+        <div class="phone"><img src="../assets/04-done-en.png" alt="Diary recorded screen" loading="lazy" onerror="this.src='../assets/04-done.png'"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 特徴(交互) -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="statement reveal">
+      <div class="divider" aria-hidden="true"><span></span></div>
+      <h2 style="margin-top:34px">Your nights become an asset.</h2>
+    </div>
+
+    <div class="feature reveal">
+      <div class="txt">
+        <h3>Sleep, steps, mood —<br>the whole day is kept.</h3>
+        <p>Health records and diary entries stack up on one calendar, and cross-reading them reveals your own patterns.</p>
+        <div class="quote">"On days with 3+ meetings, you sleep 1.8 hours less on average" — the data starts telling you about you.</div>
+      </div>
+      <div class="img"><img src="../assets/05-calendar-en.png" alt="Record calendar and highlight analysis" loading="lazy" onerror="this.src='../assets/05-calendar.png'"></div>
+    </div>
+
+    <div class="feature rev reveal">
+      <div class="txt">
+        <h3>A week becomes<br>a letter.</h3>
+        <p>Every week, AI writes you a letter from your seven days of records. The day you walked far, the night you couldn't sleep, the moment something moved you — time to hear yourself from a small distance.</p>
+        <div class="quote">Your first letter arrives free.</div>
+      </div>
+      <div class="img"><img src="../assets/07-letter-en.png" alt="Weekly AI letter screen" loading="lazy" onerror="this.src='../assets/07-letter.png'"></div>
+    </div>
+
+    <div class="feature reveal">
+      <div class="txt">
+        <h3>Table talk becomes<br>the family's diary.</h3>
+        <p>Set your iPhone on the table and just talk. The conversation is transcribed as is; tag who said what afterward, and it's kept as the family's diary. Audio never leaves the device.</p>
+        <div class="quote">Family Sharing supported. One subscription, the whole family.</div>
+      </div>
+      <div class="img"><img src="../assets/08-family-en.png" alt="Family Mode screen" loading="lazy" onerror="this.src='../assets/08-family.png'"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 料金 -->
+<section style="padding-top:0" id="pricing">
+  <div class="wrap">
+    <div class="statement reveal">
+      <div class="divider" aria-hidden="true"><span></span></div>
+      <h2 style="margin-top:34px">Starting costs<br>nothing.</h2>
+    </div>
+    <p class="free-line reveal">The daily diary, AI drafts, automatic records, and export are <b>free forever</b>.</p>
+    <div class="plans">
+      <div class="plan reco reveal">
+        <span class="badge">RECOMMENDED</span>
+        <div class="name">YEARLY</div>
+        <div class="price">¥5,000<small> /year</small></div>
+        <div class="note">14 days free · about two months off</div>
+        <ul><li>Cloud AI for higher quality</li><li>Weekly letters &amp; full highlights</li><li>The full-color Day's Picture · Family Mode</li></ul>
+      </div>
+      <div class="plan reveal">
+        <div class="name">MONTHLY</div>
+        <div class="price">¥600<small> /month</small></div>
+        <div class="note">7 days free · cancel anytime</div>
+        <ul><li>All Pro features (cloud AI)</li><li>An easy way in</li></ul>
+      </div>
+    </div>
+    <p class="pro-note reveal">Prices shown are Japan base prices — the App Store shows your local currency. Pro is the set of features that turns records into reflection; the diary itself stays free. Cancel anytime.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="statement reveal">
+      <div class="divider" aria-hidden="true"><span></span></div>
+      <h2 style="margin-top:34px">Questions, answered</h2>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary>Do I really not have to write?</summary>
+        <p>Really. AI builds a draft of your day from passive data — location, photos, sleep, steps, plans. You read it, fix what you like, and approve. On days you'd rather talk, one line into the mic is plenty.</p>
+      </details>
+      <details>
+        <summary>Can anyone see my diary?</summary>
+        <p>Your diary is stored on your device. The developer never stores or reads your entries, and they are never used for AI training. Your words are yours.</p>
+      </details>
+      <details>
+        <summary>Can I stay on the free plan?</summary>
+        <p>Yes. The daily diary, AI drafts, automatic records, and export are free forever. Your first weekly letter is also free to try.</p>
+      </details>
+      <details>
+        <summary>I'm worried I'll quit halfway.</summary>
+        <p>That's fine. While you're away, the automatic record keeps going — and the day you come back, everything from the gap is waiting for you. There are no streaks, so there is nothing to lose.</p>
+      </details>
+      <details>
+        <summary>What's the difference between Free and Pro?</summary>
+        <p>The free plan includes the daily diary, AI drafts from passive data, automatic records, and export — forever, with AI running on your iPhone. The subscription (¥600/month or ¥5,000/year; local pricing on the App Store) uses higher-quality cloud AI for the weekly letter, the full-color Day's Picture, full highlights, Tonight's Record, and Family Mode. In either case, your diary is never used for AI training. Cancel anytime.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 外部AIを使うときのプライバシー -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal" style="max-width:760px;margin-inline:auto;border:1px solid var(--hairline);border-radius:20px;padding:clamp(24px,3vw,32px);background:rgba(41,33,26,.35)">
+      <h3 style="font-size:16.5px;letter-spacing:.06em;color:var(--copper-l);margin-bottom:14px">Privacy first, even with cloud AI</h3>
+      <p style="color:var(--latte);font-size:13.5px;line-height:2">When a subscription uses higher-quality cloud AI, only your diary text passes through the developer's server to the AI provider — never your photos themselves, never raw health data. Here too, your privacy comes first.</p>
+      <ul style="list-style:none;margin-top:18px;color:var(--latte);font-size:13px;line-height:2.1">
+        <li>Text that is sent is <b style="color:var(--cream)">never used to train AI</b>.</li>
+        <li>The server <b style="color:var(--cream)">only relays — it stores and logs nothing of your diary</b>. The developer keeps no copy and has no way to read your entries later (only anonymous cost totals are kept).</li>
+        <li>Authentication uses only your App Store purchase, so <b style="color:var(--cream)">your name and account are never shared with the AI provider or the developer</b> (everything is processed anonymously).</li>
+      </ul>
+      <p style="color:var(--latte);font-size:13.5px;line-height:2;margin-top:18px">Privacy is the first thing we design for. Write the truth — it stays yours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 締めCTA -->
+<section class="final" id="get" style="padding-top:20px">
+  <div class="wrap reveal">
+    <div class="moon" aria-hidden="true"></div>
+    <h2>Liner notes,<br>for the record of today.</h2>
+    <div class="cta-row">
+      <a class="cta" href="#" onclick="return false" aria-disabled="true">Get it on the App Store</a>
+    </div>
+    <p class="cta-note" style="margin-top:18px">Almost there — see you at launch.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="links">
+    <a href="support.html">Support</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">Company</a>
+    <a href="../" hreflang="ja" lang="ja">日本語</a>
+  </div>
+  © 2026 AVES ltd.
+</footer>
+
+<script>
+// ナビの背景
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+// スクロールでふわっと表示
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), {threshold: .14});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
