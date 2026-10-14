@@ -186,6 +186,13 @@ h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.02em;line-he
 /* ---------- 動画 ---------- */
 .feature .img video{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:min(340px,100%);margin:0 auto;background:#140e0a}
 
+/* ---------- 会話の画面と Watch ---------- */
+.combo{position:relative;width:min(340px,100%);margin:0 auto}
+.combo>img{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:100%}
+.combo .watch{position:absolute;left:-18px;bottom:-22px;width:min(118px,32%);border-radius:30px;border-width:5px}
+@media (max-width:760px){.combo .watch{left:-6px}}
+.feature .img img.card-shot{border-radius:22px}
+
 /* ---------- Watch ---------- */
 .watches{display:flex;gap:clamp(14px,3vw,28px);justify-content:center;margin:0 auto}
 .watch{width:min(170px,40vw);border-radius:38px;overflow:hidden;border:6px solid #2a241e;box-shadow:0 18px 50px rgba(0,0,0,.55);background:#000}
@@ -321,14 +328,23 @@ footer a:hover{color:var(--copper-l)}
         <div class="quote">You can keep them from Apple Watch, too. One press on your wrist; your iPhone takes it from there.</div>
       </div>
       <div class="img">
-        <div class="watches">
-          <div class="watch"><img src="../assets/watch-01-idle-en.png" alt="The record button on Apple Watch" loading="lazy"></div>
+        <div class="combo">
+          <img src="../assets/conversation-en.png" alt="A conversation record: the summary and a transcript with speakers" loading="lazy">
           <div class="watch"><img src="../assets/watch-02-rec-en.png" alt="Recording on Apple Watch" loading="lazy"></div>
         </div>
       </div>
     </div>
 
     <div class="feature rev reveal">
+      <div class="txt">
+        <h3>See where the conversation<br>came alive.</h3>
+        <p>Your heart rate, the pitch of your voice, how much each of you talked, and laughter line up over the course of a conversation. Where your voice rose, the laughs gathered and your heart rate climbed, you can see when it came alive.</p>
+        <div class="quote">Touch the chart to read what was said at that moment. Heart rate appears only with Apple Watch.</div>
+      </div>
+      <div class="img"><img class="card-shot" src="../assets/conversation-timeline-en.png" alt="A conversation over time: heart rate, voice pitch, talk bars and laugh dots line up and gather just after 14:10" loading="lazy"></div>
+    </div>
+
+    <div class="feature reveal">
       <div class="txt">
         <h3>A morning note,<br>and a letter each week.</h3>
         <p>Each morning, a short note picks up from the day before. At the end of the week, a letter to you from seven days of records. The day's picture and tonight's record turn each day into something you can remember.</p>
