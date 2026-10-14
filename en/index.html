@@ -186,6 +186,13 @@ h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.02em;line-he
 /* ---------- 動画 ---------- */
 .feature .img video{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:min(340px,100%);margin:0 auto;background:#140e0a}
 
+/* ---------- 核の映像 ---------- */
+.bonds{margin:clamp(36px,6vw,56px) auto 0;width:min(620px,100%)}
+.bonds video{width:100%;
+  -webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 55%,transparent 100%);
+  mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 55%,transparent 100%)}
+.bonds figcaption{text-align:center;font-size:12px;color:var(--latte);letter-spacing:.06em;margin-top:6px}
+
 /* ---------- 会話の画面と Watch ---------- */
 .combo{position:relative;width:min(340px,100%);margin:0 auto}
 .combo>img{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:100%}
@@ -260,6 +267,16 @@ footer a:hover{color:var(--copper-l)}
     Days that would otherwise slip away build up here as <b style="color:var(--copper-l)">memories of the people in your life</b>.<br>
     So one day you can say "oh, that's right." So someday the people you love can talk about it with you.</p>
   </div>
+  <div class="wrap">
+  <figure class="bonds reveal">
+    <video autoplay muted loop playsinline preload="metadata" poster="../assets/bonds-poster-en.jpg" aria-label="Particles for people and topics change size and distance from April to October">
+      <source src="../assets/bonds-loop-en.webm" type="video/webm">
+      <source src="../assets/bonds-loop-en.mp4" type="video/mp4">
+    </video>
+    <figcaption>April to October. Who you spent time with stays in the size and closeness of each particle.</figcaption>
+  </figure>
+  </div>
+
 </section>
 
 <!-- 3 steps -->
