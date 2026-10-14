@@ -105,97 +105,129 @@
 <header>
   <div class="app-name">Liner Notes</div>
   <h1>Privacy Policy</h1>
-  <div class="dates">Effective date: July 31, 2026 · Last updated: August 18, 2026<br>Aves Inc. · <a href="../privacy.html" hreflang="ja" lang="ja">日本語</a></div>
+  <div class="dates">Effective date: July 31, 2026 · Last updated: October 14, 2026<br>Aves Inc. · <a href="../privacy.html" hreflang="ja" lang="ja">日本語</a></div>
 </header>
 
 <div class="lead">
-  <p><strong>Liner Notes keeps your diary on your device — and nowhere else.</strong></p>
-  <p>Your diary text, and the passive data around it — location, photos, sleep, steps — are all stored on your iPhone. The developer (Aves Inc.) has no mechanism to store or collect this data, so we do not collect it. (For how diary text is handled when the cloud features of Pro or the Premium Preview send it to an external AI, see Section 3.)</p>
-  <p style="margin-bottom:0;">This page explains how that works, and the few exceptions, in the plainest words we can manage. By starting to use the app, you are deemed to have agreed to this policy.</p>
+  <p><strong>Liner Notes has no accounts. What you record stays on your iPhone.</strong></p>
+  <p>Your diary, automatic records, conversation records, and voice and face features are stored on your iPhone. The developer (Aves Inc.) has no system for storing the content of your diary or conversations on its servers. To write text or create pictures, the app may send the text it needs to the route you choose (Apple's Private Cloud Compute, or OpenAI). Sections 4 and 5 describe exactly what is sent and when.</p>
+  <p style="margin-bottom:0;">This page describes, as concretely as we can, what the app handles and where. By starting to use the app, you agree to this policy.</p>
 </div>
 
 <section>
-  <h2>1. Information we do not collect</h2>
-  <p>Liner Notes collects <strong>none</strong> of the following.</p>
+  <h2>1. What stays on your iPhone</h2>
+  <p>The following is stored on your iPhone:</p>
   <ul>
-    <li>The content of your diary — text, photos, or audio</li>
-    <li>Location data, health data such as sleep and steps, or calendar events</li>
-    <li>Personally identifying information such as your name or email address (there is no account to create)</li>
-    <li>Advertising identifiers or behavioral history</li>
+    <li>Diary entries, notes, letters, and the day's pictures</li>
+    <li>Automatic records (places you stayed and their coordinates, photo times and notes about their content, summaries of sleep, steps, exercise and heart rate, and calendar events)</li>
+    <li>Conversation records (transcripts, speakers, and summaries)</li>
+    <li>Voice features (of your voice and of people you have named; these are numbers used to tell voices apart, not audio)</li>
+    <li>Face features (numbers used to recognize people in your photos; not the photos themselves)</li>
+    <li>Body and voice signs (records of how your heart rate and voice differed from usual)</li>
   </ul>
-  <p>Your data is stored on your device, and the developer has no mechanism for storing or collecting it. "We don't collect it" is not just a policy — it is how the app is built.</p>
+  <p>Deleting the app removes these from your iPhone. If you made a copy (Section 7), you can restore from it.</p>
 </section>
 
 <section>
-  <h2>2. Information used on your device, and why</h2>
-  <p>With your permission, the app reads the following information <strong>on your device only</strong>. In every case, the purpose is to prepare your diary draft automatically.</p>
-  <ul>
-    <li><strong>Location (places you stayed)</strong> — to use where you spent the day as diary material</li>
-    <li><strong>Photos</strong> — to attach the day's photos to your diary</li>
-    <li><strong>Sleep, steps, and workouts (HealthKit)</strong> — to use the day's condition and activity as diary material</li>
-    <li><strong>Calendar events</strong> — to use the day's happenings as diary material</li>
-  </ul>
-  <p><strong>On the free plan, AI drafts are generated on-device.</strong> In that case, none of the data above ever leaves your device. Pro (the subscription) uses an external AI for more natural writing, and during the <strong>Premium Preview (your first 3 mornings, up to 7 days, no card required)</strong> an external AI is used to create "The Day's Picture" (see the next section).</p>
-  <p class="note">Every permission is optional. If you decline one, that material simply isn't used — the app works fine without it.</p>
-</section>
-
-<section>
-  <h2>3. When data is sent externally (cloud AI in Pro and the Premium Preview)</h2>
-  <p><strong>On the free plan — outside Pro and the Premium Preview — diary generation happens entirely on your device, with no external communication.</strong></p>
-  <p>If you subscribe to Pro, then when generating drafts, questions, weekly letters, and similar content, when organizing memory (judging whether two topics mentioned in your diary are the same) — and during the <strong>Premium Preview (your first 3 mornings, up to 7 days, no card required, no auto-billing)</strong>, when generating "The Day's Picture" — <strong>text related to your diary is sent to an external AI service</strong>. About this communication, we promise the following.</p>
-  <ul>
-    <li><strong>The recipient is OpenAI, L.L.C. (United States).</strong> Data is sent via our server to the OpenAI API, and to no other third party.</li>
-    <li><strong>What is sent: your diary text and that day's summary data</strong> (weather, step count, sleep hours, event titles). Photos themselves, raw location data, and raw HealthKit data are never sent.</li>
-    <li><strong>We ask for your consent in the app first.</strong> Before cloud AI is used for the first time, the app shows what will be sent and to whom, and asks for your permission. If you decline, everything runs on-device, and you can change your choice anytime in Settings → Cloud AI.</li>
-    <li><strong>It is never used to train AI.</strong> Under OpenAI's API data-usage policy, the text sent is never used to train or improve AI models.</li>
-    <li><strong>It is processed anonymously.</strong> Authentication uses only your App Store purchase (or, during the Premium Preview, an anonymous per-device key). Your name, email address, and account are never shared with the external AI or with the developer.</li>
-    <li><strong>What we send is minimal, and the developer stores none of it.</strong> Only what generation requires is sent, and our server does not retain the content.</li>
-  </ul>
-  <p class="note">The cloud features of Pro and the Premium Preview use an external AI (OpenAI) — but nothing is sent without your prior consent, what is sent is never used for training, is not stored by the developer, and is transmitted only after anonymization. OpenAI provides equivalent data protection for API traffic (no training use, limited retention).</p>
-</section>
-
-<section>
-  <h2>4. HealthKit, location, and photos</h2>
-  <h3>HealthKit (sleep, steps, workouts)</h3>
-  <p>Data read from HealthKit is used <strong>solely to generate your diary drafts</strong>. In accordance with Apple's HealthKit terms, it is never provided to third parties, never used for advertising or marketing, and never repurposed.</p>
-  <h3>Location</h3>
-  <p>Location is used to record where you stayed during the day, via iOS visit detection (CLVisit). It does not continuously track your movements. The app works without this permission.</p>
+  <h2>2. Information read with your permission, and why</h2>
+  <p>Every permission is optional. Anything you don't allow simply isn't used, and the app still works.</p>
+  <h3>Location (Always)</h3>
+  <p>We use iOS visit detection to record where you spent time each day. It does not track your route continuously. Place names are looked up with Apple's services. To show the day's weather, your location is passed to Apple's weather service (WeatherKit).</p>
   <h3>Photos</h3>
-  <p>Photos are read only to accompany your diary. Your photo library is never transmitted off the device.</p>
+  <p>Photos taken that day are added to your diary, and objects, text and people in them are recognized on your iPhone (Apple Vision). Photos themselves are never sent off your iPhone. Photos stored in iCloud Photos may be downloaded from Apple for display.</p>
+  <h3>Health (HealthKit)</h3>
+  <p>We read sleep, steps, exercise and workouts, active and dietary energy, time in daylight, mindful minutes, resting heart rate, heart rate, and heart rate variability (SDNN and RMSSD) to build the day's record and to show when your body was tense or relaxed. When you record a conversation on Apple Watch, the app uses a workout session to keep recording, but it never saves a workout. HealthKit data is never used for advertising or marketing, or shared with third parties.</p>
+  <h3>Calendar</h3>
+  <p>Event titles, times, and attendee names are used as material for your record. The app writes an event only when you choose to add one.</p>
+  <h3>Microphone and speech recognition</h3>
+  <p>Used when you speak a diary entry or note, or record a conversation. Speech is converted to text on your iPhone (Section 3).</p>
+  <h3>Music</h3>
+  <p>Songs you listened to are added to your record, and songs are picked from your library's patterns. To look up song details, the song title and artist may be sent to Apple's search service.</p>
 </section>
 
 <section>
-  <h2>5. No tracking</h2>
-  <p>Liner Notes contains <strong>no analytics tools, no advertising SDKs, and no tracking mechanisms of any kind</strong>. We do not measure your usage or share it with anyone.</p>
-</section>
-
-<section>
-  <h2>6. Payments</h2>
-  <p>All purchases and subscriptions are processed by Apple through the App Store. Payment details such as credit card numbers are handled by Apple, and <strong>the developer never receives or holds your payment information</strong>.</p>
-</section>
-
-<section>
-  <h2>7. Retention, export, and deletion</h2>
+  <h2>3. Conversation records and Apple Watch</h2>
   <ul>
-    <li>All data is stored on your device, under your control</li>
-    <li>Your diary can be <strong>exported as Markdown at any time</strong></li>
-    <li>Data can be deleted from within the app at any time</li>
-    <li><strong>Deleting the app removes all data from your device completely</strong> (no copy exists on the developer's side)</li>
+    <li>We ask before you first keep conversations. You can change this anytime in Settings.</li>
+    <li>A spoken note is kept as a conversation when it lasts 2 minutes or more and includes another person's voice.</li>
+    <li>Recordings are transcribed and split by speaker on your iPhone. Once transcribed, the recording is deleted.</li>
+    <li>Audio recorded on Apple Watch is sent to your iPhone and processed the same way. It is deleted from the Watch once your iPhone confirms receipt (and after 3 days at most if it never arrives).</li>
+    <li>Voice features of people you name are kept so their voices can be recognized. Voice features of people you haven't named are deleted within 90 days.</li>
+    <li>Summaries, titles and speaker guesses are made with Apple's Private Cloud Compute (Section 4). Audio is never sent.</li>
+    <li>Whether to tell people in the room that you're recording is up to you.</li>
+  </ul>
+  <p class="note">The speech models are downloaded from Hugging Face (a model distribution service) the first time you use them. None of your records are sent in that request.</p>
+</section>
+
+<section>
+  <h2>4. Where text is created (AI route)</h2>
+  <p>In Settings → AI route, you choose where text and pictures are created:</p>
+  <ul>
+    <li><strong>On this iPhone only</strong> — created with on-device Apple Intelligence.</li>
+    <li><strong>Apple's private cloud</strong> — created with Apple's Private Cloud Compute. Available on iOS 27 and later.</li>
+    <li><strong>Also use OpenAI</strong> — the OpenAI API is also used, under the conditions in Section 5.</li>
+  </ul>
+  <h3>When Apple's private cloud is used</h3>
+  <p>For drafting and polishing your diary, the morning note, diaries from notes, conversation summaries and speaker guesses, and song picks, the text needed is sent to Apple's Private Cloud Compute. This includes diary and note text, conversation transcripts, and a summary of the day's record (weather; numbers such as sleep, steps and resting heart rate; event titles and attendee names; place names; and notes about photo content). According to Apple, data sent to Private Cloud Compute is used only to fulfill the request, is not stored, and is not accessible even to Apple.</p>
+</section>
+
+<section>
+  <h2>5. When OpenAI is used</h2>
+  <p>OpenAI is used only after you agree in the app, and only while you subscribe or during the Premium Preview (your first 3 mornings, up to 7 days, no card required, no automatic charge). You can turn it off anytime in Settings → AI route.</p>
+  <ul>
+    <li><strong>Recipient</strong>: OpenAI, L.L.C. (United States), via our relay server to the OpenAI API.</li>
+    <li><strong>When</strong>: the day's picture, the weekly letter, finding songs, and organizing memories (checking whether two topics are the same). It is also used for drafts and the morning note when Apple's private cloud is unavailable, or when you choose "OpenAI (more natural)".</li>
+    <li><strong>What is sent</strong>: diary and note text; conversation summaries (never the transcripts themselves); a summary of the day's record (weather; numbers such as sleep, steps and resting heart rate; event titles; place names; notes about photo content); and your library's patterns for song picks (frequent genres and artists).</li>
+    <li><strong>What is not sent</strong>: audio, photos themselves, detailed health records (such as heart rate over time), and voice or face features.</li>
+    <li><strong>Training</strong>: under OpenAI's API data usage policy, text sent is not used to train AI models. Retention follows OpenAI's API terms.</li>
+    <li><strong>Relay server</strong>: only relays the request; it does not store or log the content.</li>
   </ul>
 </section>
 
 <section>
-  <h2>8. Age rating and legal compliance</h2>
-  <p>The app is rated 4+. We comply with Japan's Act on the Protection of Personal Information and its related laws and guidelines, and we honor applicable privacy laws in the regions where the app is offered.</p>
+  <h2>6. What our servers keep</h2>
+  <p>The content of your diary and conversations is never kept. To run the service, we keep only the following, none of which is linked to your name or email address:</p>
+  <ul>
+    <li>Premium Preview records (an anonymous per-device key, count, expiry, and an Apple App Attest public key)</li>
+    <li>Monthly usage cost per subscription (per App Store transaction ID, to enforce spending limits)</li>
+    <li>Aggregate counts such as total requests</li>
+  </ul>
+  <p>The relay server runs on Render (a U.S. provider), whose infrastructure may keep connection logs such as IP addresses.</p>
 </section>
 
 <section>
-  <h2>9. Changes to this policy</h2>
-  <p>This policy may be revised as features are added or laws change. If we make a significant change, we will announce it in the app or on this page. The latest version is always available here. If you continue to use the app after a revision, you are deemed to have agreed to the revised policy.</p>
+  <h2>7. Copies (backups) and export</h2>
+  <ul>
+    <li><strong>iCloud Drive copy</strong>: if you choose it, a full copy (diary, automatic records with place coordinates, conversation records, voice and face features, body and voice signs, pictures) and your diary in Markdown are placed in your iCloud Drive every day. Audio and photos themselves are not included. The app does not add its own encryption (iCloud's protection applies).</li>
+    <li><strong>File for other AI tools</strong>: if you choose the iCloud Drive copy, a file summarizing recent diary excerpts and frequent people and topics is also placed in the same iCloud Drive.</li>
+    <li><strong>iPhone backups</strong>: voice features are also included in your iPhone's own backup (such as iCloud Backup).</li>
+    <li><strong>Export</strong>: in Settings you can export all your records anytime as Markdown (zip) or as a full copy.</li>
+    <li><strong>Deletion</strong>: you can delete records in the app. Deleting the app removes the records on your iPhone. We hold no copy.</li>
+  </ul>
 </section>
 
 <section>
-  <h2>10. Contact</h2>
+  <h2>8. No tracking</h2>
+  <p>The app contains no analytics, advertising, or crash-collection tools. We don't measure your usage or share it with others.</p>
+</section>
+
+<section>
+  <h2>9. Payments</h2>
+  <p>Purchases and subscriptions are processed entirely by Apple (App Store). Payment details are managed by Apple; we never receive them. Only App Store purchase information is used to verify a subscription.</p>
+</section>
+
+<section>
+  <h2>10. Age rating and legal compliance</h2>
+  <p>The app is rated 4+. We comply with Japan's Act on the Protection of Personal Information and related laws and guidelines, and respect the privacy laws that apply in each country and region where the app is offered.</p>
+</section>
+
+<section>
+  <h2>11. Changes to this policy</h2>
+  <p>We may update this policy as features are added or laws change. We'll announce important changes in the app or on this page. Continuing to use the app after an update means you agree to the updated policy.</p>
+</section>
+
+<section>
+  <h2>12. Contact</h2>
   <p>If anything about this policy or our handling of data is unclear, please don't hesitate to reach out.</p>
   <p>
     Aves Inc.<br>
