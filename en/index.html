@@ -183,6 +183,9 @@ h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.02em;line-he
 .pro-note{text-align:center;margin-top:26px;font-size:12px;color:var(--latte)}
 @media (max-width:760px){.plans{grid-template-columns:1fr;max-width:400px;margin-inline:auto}}
 
+/* ---------- 動画 ---------- */
+.feature .img video{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:min(340px,100%);margin:0 auto;background:#140e0a}
+
 /* ---------- Watch ---------- */
 .watches{display:flex;gap:clamp(14px,3vw,28px);justify-content:center;margin:0 auto}
 .watch{width:min(170px,40vw);border-radius:38px;overflow:hidden;border:6px solid #2a241e;box-shadow:0 18px 50px rgba(0,0,0,.55);background:#000}
@@ -301,6 +304,18 @@ footer a:hover{color:var(--copper-l)}
 
     <div class="feature rev reveal">
       <div class="txt">
+        <h3>See who you've spent<br>your days with.</h3>
+        <p>People become glass particles and topics become capsules, growing larger and closer the more time you spent together. Let time play, and you'll see who newly appeared, who you haven't seen in a while, and which topics came to an end.</p>
+        <div class="quote">Pictures from each period's highlights drift slowly in the background.</div>
+      </div>
+      <div class="img"><video autoplay muted loop playsinline preload="metadata" poster="../assets/atlas-poster-en.jpg" aria-label="The Atlas screen. As time plays from April to October, particles for people and topics change size and distance">
+        <source src="../assets/atlas-loop-en.webm" type="video/webm">
+        <source src="../assets/atlas-loop-en.mp4" type="video/mp4">
+      </video></div>
+    </div>
+
+    <div class="feature reveal">
+      <div class="txt">
         <h3>Keep time with the people<br>who matter, in their words.</h3>
         <p>Keep a conversation from a spoken note, and it's transcribed on your iPhone and split by speaker. The recording is deleted once it's text. Conversations with people you name become part of your memories of them.</p>
         <div class="quote">You can keep them from Apple Watch, too. One press on your wrist; your iPhone takes it from there.</div>
@@ -313,7 +328,7 @@ footer a:hover{color:var(--copper-l)}
       </div>
     </div>
 
-    <div class="feature reveal">
+    <div class="feature rev reveal">
       <div class="txt">
         <h3>A morning note,<br>and a letter each week.</h3>
         <p>Each morning, a short note picks up from the day before. At the end of the week, a letter to you from seven days of records. The day's picture and tonight's record turn each day into something you can remember.</p>

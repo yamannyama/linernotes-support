@@ -181,6 +181,9 @@ h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.08em;line-he
 .pro-note{text-align:center;margin-top:26px;font-size:12px;color:var(--latte)}
 @media (max-width:760px){.plans{grid-template-columns:1fr;max-width:400px;margin-inline:auto}}
 
+/* ---------- 動画 ---------- */
+.feature .img video{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:min(340px,100%);margin:0 auto;background:#140e0a}
+
 /* ---------- Watch ---------- */
 .watches{display:flex;gap:clamp(14px,3vw,28px);justify-content:center;margin:0 auto}
 .watch{width:min(170px,40vw);border-radius:38px;overflow:hidden;border:6px solid #2a241e;box-shadow:0 18px 50px rgba(0,0,0,.55);background:#000}
@@ -299,6 +302,18 @@ footer a:hover{color:var(--copper-l)}
 
     <div class="feature rev reveal">
       <div class="txt">
+        <h3>誰と過ごしてきたかが、<br>時間の中で見える。</h3>
+        <p>人はガラスの粒に、話題はカプセルになって、一緒にいた時間が多いほど大きく、近くなります。時間を流すと、新しく現れた人、しばらく会っていない人、終わった話題が、静かに移り変わっていきます。</p>
+        <div class="quote">その時期のハイライトの絵が、背景にゆっくり流れます。</div>
+      </div>
+      <div class="img"><video autoplay muted loop playsinline preload="metadata" poster="assets/atlas-poster.jpg" aria-label="Atlasの画面。4月から10月へ時間を流すと、人と話題の粒が大きさと近さを変えていく">
+        <source src="assets/atlas-loop.webm" type="video/webm">
+        <source src="assets/atlas-loop.mp4" type="video/mp4">
+      </video></div>
+    </div>
+
+    <div class="feature reveal">
+      <div class="txt">
         <h3>大切な人との時間を、<br>言葉のまま残す。</h3>
         <p>話してメモで会話を残すと、iPhoneの中で文字になり、話し手ごとに分かれます。録音は文字にしたあと消えます。名前を付けた人との会話は、記憶の中でその人に結びついていきます。</p>
         <div class="quote">Apple Watchからも残せます。手首でひと押し、あとはiPhoneが引き受けます。</div>
@@ -311,7 +326,7 @@ footer a:hover{color:var(--copper-l)}
       </div>
     </div>
 
-    <div class="feature reveal">
+    <div class="feature rev reveal">
       <div class="txt">
         <h3>朝の一筆と、<br>一週間の手紙。</h3>
         <p>翌朝、前の日を受けとめる一筆が届きます。週の終わりには、7日分の記録からあなた宛ての手紙が。その日の一枚の絵と、今夜の一枚の曲が、一日一日を思い出せる形にします。</p>
