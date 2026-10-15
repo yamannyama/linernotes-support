@@ -184,6 +184,18 @@ h1{font-size:clamp(30px,6.4vw,56px);font-weight:600;letter-spacing:.08em;line-he
 /* ---------- 動画 ---------- */
 .feature .img video{border-radius:28px;border:1px solid rgba(201,143,95,.3);box-shadow:0 24px 70px rgba(0,0,0,.55);width:min(340px,100%);margin:0 auto;background:#140e0a}
 
+/* ---------- 3つの約束(ヒーロー直下) ---------- */
+.facts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.facts span{font-size:11.5px;letter-spacing:.06em;color:var(--cream);opacity:.85;border:1px solid var(--hairline);border-radius:99px;padding:4px 12px;background:rgba(21,16,9,.45)}
+.beats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,20px);max-width:900px;margin:0 auto}
+.beat{text-align:center;padding:6px 8px}
+.beat b{display:block;font-size:clamp(17px,2.4vw,21px);letter-spacing:.08em;font-weight:600;color:var(--cream)}
+.beat span{display:block;margin-top:8px;font-size:12.5px;color:var(--latte);line-height:1.9}
+@media (max-width:760px){.beats{grid-template-columns:1fr;gap:22px}}
+/* Product Hunt の公開日だけ出す帯(LAUNCH_BANNER を外すと表示) */
+.launch-bar{position:relative;z-index:60;text-align:center;font-size:12.5px;padding:9px 16px;background:var(--copper);color:#241708;letter-spacing:.06em}
+.launch-bar a{text-decoration:underline}
+
 /* ---------- 核の映像 ---------- */
 .bonds{margin:clamp(36px,6vw,56px) auto 0;width:min(620px,100%)}
 .bonds video{width:100%;
@@ -230,6 +242,9 @@ footer a:hover{color:var(--copper-l)}
 </head>
 <body>
 
+<!-- LAUNCH_BANNER: Product Hunt の公開日だけ、下の行のコメントを外す(48時間後に戻す)
+<div class="launch-bar">Product Huntで公開中です。<a href="https://www.producthunt.com/posts/liner-notes" target="_blank" rel="noopener">感想を聞かせてください →</a></div>
+-->
 <nav id="nav" aria-label="グローバル">
   <a class="brand" href="#top"><img src="assets/icon.png" alt="Liner Notes アイコン" width="30" height="30">Liner Notes</a>
   <div style="display:flex;align-items:center;gap:12px">
@@ -252,10 +267,21 @@ footer a:hover{color:var(--copper-l)}
       <a class="cta" href="https://apps.apple.com/jp/app/id6787426245" id="hero-cta">App Storeで入手</a>
       <span class="cta-note">毎日の日記と自動の記録は、ずっと無料。</span>
     </div>
+    <div class="facts"><span>アカウント不要</span><span>記録はiPhoneに残る</span><span>Apple Watch対応</span>
+    </div>
   </div>
 </header>
 
 <main>
+<!-- 3つの約束 -->
+<section style="padding-bottom:0">
+  <div class="wrap beats reveal">
+      <div class="beat"><b>書かなくても、残る</b><span>場所・写真・予定・体の記録から、その日の下書きができている。</span></div>
+      <div class="beat"><b>人との時間が、残る</b><span>会話も、一緒に過ごした日々も、関係の記憶として積み重なる。</span></div>
+      <div class="beat"><b>あなたの手元に、残る</b><span>アカウントはなし。いつでも全部、書き出して持ち出せる。</span></div>
+  </div>
+</section>
+
 <!-- 核 -->
 <section>
   <div class="wrap statement reveal">
@@ -468,7 +494,7 @@ footer a:hover{color:var(--copper-l)}
 <section class="final" id="get" style="padding-top:20px">
   <div class="wrap reveal">
     <div class="moon" aria-hidden="true"></div>
-    <h2>今日という一枚に、<br>ライナーノーツを。</h2>
+    <h2>流れていく日々を、<br>今日から残そう。</h2>
     <div class="cta-row">
       <a class="cta" href="https://apps.apple.com/jp/app/id6787426245">App Storeで入手</a>
     </div>
