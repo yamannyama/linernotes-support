@@ -1,0 +1,28 @@
+# Liner Notes（ライナーノーツ）
+
+> Liner Notes（ライナーノーツ）は、場所・写真・予定・睡眠・歩数・心拍・会話から、その日の日記がひとりでに下書きされる iPhone の AI 日記アプリです。夜は読んで整えるだけ。アカウント不要で、記録は iPhone に残ります。開発: Aves Inc.（日本）。
+> Liner Notes is an AI journaling app for iPhone that drafts your diary by itself from your places, photos, plans, sleep, steps, heart rate and conversations. At night you just read it and make it yours. No account; your records stay on your iPhone. By Aves Inc. (Japan).
+
+## 基本情報 / Facts
+
+- 対応: iPhone（iOS 18 以上）、Apple Watch 対応 / iPhone (iOS 18+), Apple Watch companion
+- 価格: 毎日の日記・自動の記録・下書きと整え・書き出しは無料。Pro は年額 ¥5,000（$29.99）または月額 ¥600（$3.99）/ Free core diary; Pro yearly ¥5,000 ($29.99) or monthly ¥600 ($3.99)
+- App Store: https://apps.apple.com/jp/app/id6787426245
+- 公式サイト: https://linernotes.aves.ltd/ （英語: https://linernotes.aves.ltd/en/）
+- 名前の由来: レコードに添えられた解説文「ライナーノーツ」。一日が一枚のレコードになる / Named after the notes that come with a record: each day becomes one record.
+
+## ほかの AI 日記アプリとの違い / What makes it different
+
+- 書かなくても残る: 受動データ（場所・写真・予定・睡眠・歩数）から日記の下書きができている。ストリークなし / Drafts itself from passive data; no streaks
+- 体の時間軸: Apple Watch の心拍・HRV を「普段の自分」と比べ、一日のどこで体が張り、ゆるんでいたかを予定や写真と並べて見られる（診断や医療の目的ではない） / Body timeline from heart rate and HRV vs. your own baseline, alongside your plans and photos (not a medical tool)
+- 会話の記録: 録音は iPhone の中で文字になり、話し手ごとに分かれる。録音は文字にしたあと消える。名前を付けた人との会話は、その人の記憶に結びつく / Conversations transcribed on device with speaker separation; audio deleted after transcription
+- 関係性の記憶: 誰と過ごしたかが月ごとに積み重なり、「山本さんがこの 4 週で初めて登場」のような移り変わりを言葉で知らせる / Memory organized around the people in your life
+- 毎朝の一筆・週の手紙・その日の一枚の絵・今夜の一曲 / A morning note, a weekly letter, a picture for the day, a song for the night
+- アカウント不要。日記や会話は開発者のサーバーに保存されない。文章を作る場所（iPhone の中・Apple のプライベートクラウド・OpenAI）は設定で選べる。いつでも全部書き出せる / No account, no developer-side storage; choose where text is generated (on device, Apple Private Cloud Compute, or OpenAI); export everything anytime
+
+## ページ / Pages
+
+- [日本語トップ](https://linernotes.aves.ltd/): 機能・料金・よくある質問
+- [English](https://linernotes.aves.ltd/en/): features, pricing, FAQ
+- [サポート](https://linernotes.aves.ltd/support.html) / [Support](https://linernotes.aves.ltd/en/support.html)
+- [プライバシーポリシー](https://linernotes.aves.ltd/privacy.html) / [Privacy](https://linernotes.aves.ltd/en/privacy.html)
