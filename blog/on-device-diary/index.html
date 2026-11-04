@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一日の会話を iPhone の中だけで文字にする日記アプリを作って、測るしかなかった 5 つのこと｜Liner Notes</title>
+<meta name="description" content="裏に回ると CPU の仕事が遅いコアで動く、読み上げのベンチで認識器の順位が逆になる、文字の誤り率が同じでも要約の間違いは 3 倍違う、Apple の PCC に本番の依頼の 10.6% が断られる、自分のコピーは 62〜67% しか一致しない。iPhone の中で会話を文字にする日記アプリを作って、実機で測るしかなかった 5 つの数字。">
+<meta name="author" content="Yu Yamada, Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/blog/on-device-diary/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/on-device-diary/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/on-device-diary/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="一日の会話を iPhone の中だけで文字にする日記アプリを作って、測るしかなかった 5 つのこと">
+<meta property="og:description" content="裏に回ると CPU の仕事が遅いコアで動く、読み上げのベンチで認識器の順位が逆になる、文字の誤り率が同じでも要約の間違いは 3 倍違う、Apple の PCC に本番の依頼の 10.6% が断られる、自分のコピーは 62〜67% しか一致しない。iPhone の中で会話を文字にする日記アプリを作って、実機で測るしかなかった 5 つの数字。">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://linernotes.aves.ltd/blog/on-device-diary/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="一日の会話を iPhone の中だけで文字にする日記アプリを作って、測るしかなかった 5 つのこと">
+<meta name="twitter:description" content="裏に回ると CPU の仕事が遅いコアで動く、読み上げのベンチで認識器の順位が逆になる、文字の誤り率が同じでも要約の間違いは 3 倍違う、Apple の PCC に本番の依頼の 10.6% が断られる、自分のコピーは 62〜67% しか一致しない。iPhone の中で会話を文字にする日記アプリを作って、実機で測るしかなかった 5 つの数字。">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"一日の会話を iPhone の中だけで文字にする日記アプリを作って、測るしかなかった 5 つのこと","description":"裏に回ると CPU の仕事が遅いコアで動く、読み上げのベンチで認識器の順位が逆になる、文字の誤り率が同じでも要約の間違いは 3 倍違う、Apple の PCC に本番の依頼の 10.6% が断られる、自分のコピーは 62〜67% しか一致しない。iPhone の中で会話を文字にする日記アプリを作って、実機で測るしかなかった 5 つの数字。","datePublished":"2026-11-04","dateModified":"2026-11-04","inLanguage":"ja","author":{"@type":"Person","name":"Yu Yamada","affiliation":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"}},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/on-device-diary/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../"><img src="../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label">Engineering notes</p>
+    <h1>一日の会話を iPhone の中だけで文字にする日記アプリを作って、測るしかなかった 5 つのこと</h1>
+    <p class="meta">2026 年 11 月 4 日 · Yu Yamada(Aves Inc.) · <a href="https://linernotes.aves.ltd/en/blog/on-device-diary/">English</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>子供が生まれてから、子供の成長と自分との関係性の変化を日記に残したいと思い、iPhone に一日を記録させて夜に下書きを置くアプリを作りました。文字起こしと「この声は自分か」の判定は端末内、要約だけ Apple のクラウド(PCC)、記録は外に出しません。</p>
+<p>3ヶ月ほど作る中で、Apple の説明書に無いことを実機で測るしかなかった 5 つです。</p>
+<h2>1. 裏に回ると CPU の仕事は遅いコアで動く。Neural Engine は影響を受けない</h2>
+<p>表なら 33 秒の処理が、裏(BGContinuedProcessingTask)では 5 分たっても終わらない。Apple のフォーラムにも「裏で 4〜5 倍遅い、原因不明」とあります。私も「裏では Neural Engine が遅い」と思っていましたが、測ると Neural Engine は 2 倍以内で、遅いのは CPU の経路でした。同じ仕事(日本語 10 分の文字起こし)を条件を変えて測った結果です(iPhone 16、iOS 27、2 回の中央値)。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>計算ユニット</th><th>表</th><th>裏(継続処理)</th><th>裏(録音中)</th></tr></thead>
+<tbody>
+<tr><th>Neural Engine</th><td>2.2 秒</td><td>4.3 秒(2 倍)</td><td>2.4 秒</td></tr>
+<tr><th>CPU だけ</th><td>8.4 秒</td><td>102〜174 秒(12〜21 倍)</td><td>7.3 秒</td></tr>
+</tbody></table></div>
+<p>さらにプロセスの CPU 時間とエネルギーを task_info で読むと、CPU 推論は表 8.7 秒の壁時計に CPU 時間 7.9 秒、裏では壁時計 112 秒に CPU 時間 86 秒、エネルギーは 4.6 分の 1。同じ仕事に 11 倍の CPU 時間がかかっていて、CPU を取り上げられてはいない。待たされているのではなく、省エネの遅いコアで低いクロックで動いている、が最もよく合う説明です(Instruments で直接見てはいないので推定)。片ごとの秒を見ると、裏では最初の片から遅く(1.7 秒、表は 0.14 秒)、しかも 1.7 秒と 8 秒前後の 2 段階が同じ実行の途中で切り替わります。「負荷が 30 秒続くと表でも遅いコアに移る」という古い報告とは別の現象です。</p>
+<p>教訓は 3 つ。裏で遅いなら、モデルではなく CPU で動く段階(前処理、仕分け、後処理)を疑う。Core ML を <code>.background</code> 優先度の Task から呼ばない(表にいても 3.6 倍遅く、CPU の経路は優先度で変わらない)。マイクを開いている間は裏でも表と同じ速さなので、重い処理は録音中に終える。アプリはそう直して、録音後にやっていた笑いの数え直し 167 秒が 0 秒になりました。</p>
+<h2>2. 読み上げで測ると、会話の文字起こしの順位が逆になる</h2>
+<p>読み上げ(FLEURS 日本語)では Apple の認識器 4.7%、Parakeet 5.3%。放送の会話 258 分では Parakeet 12.7%、Apple 23.0%。Apple は無言を返したり、誰も言っていない「ありがとうございます」を足したりします。読み上げで選んでいたら乗り換えて失敗していました。</p>
+<p>罠がもう一つ。IBM の Granite を比較に加えたとき、音声の前後に 0.5 秒の無音を足すかどうかだけで誤り率が 3 ポイント動きました。条件をそろえると Granite と Parakeet は同じで、実録音では Parakeet の方が句を落とさないので、アプリは Parakeet のままです。</p>
+<h2>3. 文字の誤り率が同じでも、要約の間違いは 3 倍違う</h2>
+<p>同じ会話から要約を作って伏せて比べると、間違いを含む話題が 9/32 対 3/29。文字誤り率は同じでした。利用者が読むのは要約なので、物差しを間違えていました。要約の指示も逆に効き、「本文にある数字だけ使え」と縛ると、聞き間違いの数字をそのまま写し(「2、3 社」が「23 社」になる)、かえって増えます。語の確信度は正誤に関係なく 0.95 で、重みに使えません。</p>
+<h2>4. Apple の PCC に本番の依頼が「不適切」と断られる率</h2>
+<p>Apple のガードレールが普通の依頼を断りすぎることは、端末内モデルについては開発者フォーラムで何度も報告されています。クラウド側(PCC)を本番で使った率は見当たらなかったので、自分の iPhone の本番ログ 41 日分を数えました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>呼び出し</th><th>失敗</th><th>「不適切」で拒否</th><th>レート制限</th><th>1 日の上限</th></tr></thead>
+<tbody>
+<tr><th>614 回</th><td>130 回</td><td>65 回(10.6%)</td><td>59 回(9.6%)</td><td>0 回</td></tr>
+</tbody></table></div>
+<p>断られるのは普通の日記の下書きと会話の要約で、技術の打ち合わせの録音も断られます。拒否は 7.6〜12.7 秒かかり、成功(1〜3 秒)より長い。返事を流し始めてからフィルタが止めるからです。レート制限は 1 分 8〜10 回で、朝の一括生成が毎日当たっていました。上限は開発機で 1 日約 700 回。正直に言うと、<code>resetDate</code> を返す API を読んでおらず、上限が iCloud アカウント単位で他アプリと共有だとも知りませんでした。</p>
+<h2>5. 何を与えても「自分のコピー」は 62〜67% しか一致しない。人を見分けるのは話し方</h2>
+<p>自己紹介の一行、日記 2 万トークン、価値観 31 問、面接 12 問。何を与えても自分の選択との一致は 0.62〜0.67 で、一行の自己紹介がいちばん強い(0.72)。一方、話し方は相手で変わります。間は同僚 1.6 秒、妻 2.2 秒、娘 2.8 秒、上司 5.3 秒。一文は家族に 20 字、同僚に 32 字。研究でも、韻律だけで知人を当てられ、文章のなりすましには家族でもだまされ、遺族は事実より口調で判じる。だから整形前の言葉と声の数字と相手を、自分の分だけ残す作りにしました。相手の声は残さず、音声は 24 時間で消します。</p>
+<h2>まだ無いもの</h2>
+<p>iOS と watchOS だけ。アプリは非公開、計測アプリは公開。日本語が主で英語は未測定。機能ごとの拒否率と一日の電池は記録中。日記と書き出しは無料、毎朝の一筆、会話の記録、絵と選曲が Pro(月 $3.99)。</p>
+<p>裏の処理、PCC の本番運用、HealthKit の癖、認識器の比べ方、うまくいかなかったこと、何でも聞いてください。</p>
+  </div>
+</article>
+
+<section class="final">
+  <div class="wrap">
+    <p class="label">Liner Notes</p>
+    <h2 style="margin-top:20px">書かなくても、今日は残っている。</h2>
+    <p>毎日の日記と自動の記録は、ずっと無料。アカウント不要、記録は iPhone に。</p>
+    <div class="cta-row">
+      <a class="cta" href="https://apps.apple.com/jp/app/id6787426245">App Storeで入手</a>
+      <a href="../../" style="font-size:13px;letter-spacing:.08em;color:var(--copper-l)">Liner Notes について →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="links">
+    <a href="../../">Liner Notes</a>
+    <a href="../../support.html">サポート</a>
+    <a href="../../privacy.html">プライバシーポリシー</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">運営会社</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>
