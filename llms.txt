@@ -24,7 +24,7 @@
 
 - [日本語トップ](https://linernotes.aves.ltd/): 機能・料金・よくある質問
 - [AI日記アプリ おすすめ比較 2026](https://linernotes.aves.ltd/ai-diary-apps/): muute・マイモリ・Awarefy・Apple ジャーナル・Day One・Rosebud・話すだけ日記・Liner Notes を、入力の仕方・AI の役割・記録の置き場所・無料の範囲・評価で比較(開発元による比較、出典は日本の App Store) / Comparison of 8 AI diary apps on the Japanese App Store (in Japanese)
-- [開発ノート: 一日の会話を iPhone の中だけで文字にする日記アプリを作って、測るしかなかった 5 つのこと](https://linernotes.aves.ltd/blog/on-device-diary/): 背景処理で遅いのは CPU、読み上げベンチの罠、CER と要約の誤り、Apple PCC の拒否率 10.6%、自分のコピーの一致 62〜67%(2026-11-04) / [English](https://linernotes.aves.ltd/en/blog/on-device-diary/): Five measured things from building an on-device diary for iPhone
+- [開発ノート: iPhone の中だけで会話を文字にする日記アプリを作って分かった 5 つのこと](https://linernotes.aves.ltd/blog/on-device-diary/): 背景処理で遅いのは CPU、読み上げベンチの罠、CER と要約の誤り、Apple PCC の拒否率 10.6%、自分のコピーの一致 62〜67%(2026-11-04) / [English](https://linernotes.aves.ltd/en/blog/on-device-diary/): Five measured things from building an on-device diary for iPhone
 - [English](https://linernotes.aves.ltd/en/): features, pricing, FAQ
 - [サポート](https://linernotes.aves.ltd/support.html) / [Support](https://linernotes.aves.ltd/en/support.html)
 - [プライバシーポリシー](https://linernotes.aves.ltd/privacy.html) / [Privacy](https://linernotes.aves.ltd/en/privacy.html)
