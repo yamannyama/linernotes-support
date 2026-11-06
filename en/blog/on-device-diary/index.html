@@ -9,7 +9,7 @@
 <link rel="canonical" href="https://linernotes.aves.ltd/en/blog/on-device-diary/">
 <link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/on-device-diary/">
 <link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/on-device-diary/">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" content="noindex,follow">
 <meta property="og:site_name" content="Liner Notes">
 <meta property="og:title" content="What I measured building an on-device diary app for iPhone">
 <meta property="og:description" content="Five measured findings from an on-device iPhone diary: background CPU on slow cores, misleading read-speech benchmarks, Apple PCC refusing 10.6% of requests.">
@@ -112,7 +112,7 @@ footer a:hover{color:var(--copper-l)}
 <tbody>
 <tr><th>614</th><td>130</td><td>65 (10.6%)</td><td>59 (9.6%)</td><td>0</td></tr>
 </tbody></table></div>
-<p>What gets refused is ordinary diary drafts and summaries of conversations; a recording of a technical meeting gets refused too. A refusal takes 7.6–12.7 s, longer than a success (1–3 s), because the response starts streaming before the filter stops it. Rate limiting kicks in at 8–10 calls per minute, which my morning batch hit every day. The daily quota is about 700 calls on a development phone. To be honest, I had not read the API that returns <code>resetDate</code>, and I did not know the quota is per iCloud account and shared with other apps.</p>
+<p>What gets refused is ordinary diary drafts and summaries of conversations; a recording of a technical meeting gets refused too. A refusal takes 7.6–12.7 s, longer than a success (1–3 s), because the response starts streaming before the filter stops it. Rate limiting kicks in at 8–10 calls per minute, which my morning batch hit every day. There is a daily quota too: on a development phone, one day of 1,158 calls had 689 fail with the quota error. To be honest, I had not read the API that returns <code>resetDate</code>, and I did not know the quota is per iCloud account and shared with other apps.</p>
 <h2>5. Whatever I fed it, my "copy" agreed with me only 62–67% of the time. What identifies a person is how they talk.</h2>
 <p>I had an LLM stand in for me and measured how often it made the same choices I would. The material: a one-line bio, 20,000 tokens of diary, 31 answers about my values, a 12-question interview. Whatever I gave it, agreement with my own choices was 0.62–0.67. The one-line bio was the strongest (0.72), and adding my own answers made it worse.</p>
 <p>How I talk, on the other hand, clearly changes with the listener. Pauses between utterances: 1.6 s with coworkers, 2.2 s with my wife, 2.8 s with my daughter, 5.3 s with my boss. Sentence length: 20 characters with family, 32 with coworkers. The research points the same way: people can identify someone they know from the melody of the voice alone, even family members cannot tell a written impersonation from the real person, and the bereaved judge "that sounds like them" by tone rather than by whether the facts are right. What makes a person recognizable is how they say things, not what they say.</p>

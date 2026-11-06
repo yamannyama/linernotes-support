@@ -122,22 +122,6 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/digital-twin/"/>
   </url>
   <url>
-    <loc>https://linernotes.aves.ltd/blog/on-device-diary/</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/on-device-diary/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/on-device-diary/"/>
-  </url>
-  <url>
-    <loc>https://linernotes.aves.ltd/en/blog/on-device-diary/</loc>
-    <lastmod>2026-11-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/on-device-diary/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/on-device-diary/"/>
-  </url>
-  <url>
     <loc>https://linernotes.aves.ltd/support.html</loc>
     <lastmod>2026-07-18</lastmod>
     <changefreq>monthly</changefreq>

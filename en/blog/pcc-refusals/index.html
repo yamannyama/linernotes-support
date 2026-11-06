@@ -3,30 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe｜Liner Notes</title>
-<meta name="description" content="Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.">
+<title>Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe</title>
+<meta name="description" content="Apple&#x27;s Private Cloud Compute (Foundation Models) refused 10.6% of 614 production requests and rate-limited 9.6%. What broke and how I redesigned.">
 <meta name="author" content="Aves Inc.">
 <link rel="canonical" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
 <link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
 <link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
+<link rel="alternate" hreflang="x-default" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:site_name" content="Liner Notes">
 <meta property="og:title" content="Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe">
-<meta property="og:description" content="Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.">
+<meta property="og:description" content="Apple&#x27;s Private Cloud Compute (Foundation Models) refused 10.6% of 614 production requests and rate-limited 9.6%. What broke and how I redesigned.">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
-<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/og/pcc-refusals-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe">
-<meta name="twitter:description" content="Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.">
-<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:description" content="Apple&#x27;s Private Cloud Compute (Foundation Models) refused 10.6% of 614 production requests and rate-limited 9.6%. What broke and how I redesigned.">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/og/pcc-refusals-en.png">
 <meta name="theme-color" content="#151009">
 <link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/favicon-32.png">
 <link rel="apple-touch-icon" href="../../../assets/favicon-180.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe","description":"Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/pcc-refusals/"}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe","description":"Apple&#x27;s Private Cloud Compute (Foundation Models) refused 10.6% of 614 production requests and rate-limited 9.6%. What broke and how I redesigned.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"image":"https://linernotes.aves.ltd/assets/og/pcc-refusals-en.png","mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/pcc-refusals/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Liner Notes","item":"https://linernotes.aves.ltd/en/"},{"@type":"ListItem","position":2,"name":"Engineering notes","item":"https://linernotes.aves.ltd/en/blog/"},{"@type":"ListItem","position":3,"name":"Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe","item":"https://linernotes.aves.ltd/en/blog/pcc-refusals/"}]}
 </script>
 <style>
 :root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
@@ -172,7 +178,7 @@ table.art td{white-space:normal;min-width:6.5em}
 <p>Refusals and rate limits caused four problems in the app.</p>
 <p>First, summaries went missing silently. When PCC failed, no summary was made, leaving memos with a transcript but no summary. To users that looks like a bug.</p>
 <p>Second, a safety switch shut PCC off in production. I had a switch that disables a generation path if the app crashes in the middle of it. It counted a background task that merely expired as a crash, and on October 16 it turned off PCC entirely in production.</p>
-<p>Third, I deleted records while over the daily quota. On a development iPhone I regenerated person profiles in bulk, hit the quota at about 700 requests in a day, and every request after that failed. The job deleted old records before regenerating them, so once they were deleted they could not be rebuilt, and the records dropped to 7.</p>
+<p>Third, I deleted records while over the daily quota. On the day I regenerated person profiles in bulk on a development iPhone, it made 1,158 requests and 689 of them failed with the quota error. Once the quota is hit, every request fails. The job deleted old records before regenerating them, so once they were deleted they could not be rebuilt, and the records dropped to 7.</p>
 <p>Fourth, the morning batch hit the rate limit. The limit kicks in at 8–10 requests in the previous 60 seconds. The morning notes were generated together in the 7 o'clock hour, and in production only 3 of 14 requests in that hour succeeded.</p>
 <figure class="viz" role="group" aria-label="Success rate by hour (production, hours with 10+ requests, JST)">
 <p class="vt">Success rate by hour (production, hours with 10+ requests, JST)</p>
@@ -242,6 +248,7 @@ table.art td{white-space:normal;min-width:6.5em}
 <h2>Summary</h2>
 <ul><li>Before putting PCC in production, measure the refusal rate on your app's real requests. In my app it was 10.6%</li><li>Decide the fallback for a refusal in advance. For summaries, save the transcript first and add the summary later</li><li>The rate limit kicks in at 8–10 requests in 60 seconds. Spread batch generation over time</li><li>When you hit the daily quota, read <code>resetDate</code> from the error. Never run delete-then-regenerate while over quota</li><li>Log the feature and failure type for every request so you can see which feature is being refused</li></ul>
 <aside class="promo"><img src="../../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>These measurements come from building Liner Notes, an iPhone diary app. Liner Notes turns the day’s conversations into text on your iPhone and leaves a diary draft for you in the evening. The diary and automatic records are free.</p><a class="promo-cta" href="https://apps.apple.com/us/app/id6787426245">Get it on the App Store</a></div></aside>
+<h2>More engineering notes</h2><ul class="posts"><li><a class="t" href="../background-neural-engine/">On iOS, run background audio processing on the Neural Engine</a><p>In an iOS BGContinuedProcessingTask, CPU work ran 12-21x slower while Core ML on the Neural Engine stayed within 2x. Three causes and the fix, measured.</p></li><li><a class="t" href="../asr-benchmark/">Choosing a speech recognizer by benchmark alone is risky. Measure with the audio your app actually handles</a><p>On read speech Apple&#x27;s recognizer looked best; on conversation its error rate was 1.8x Parakeet&#x27;s. How to compare Japanese speech recognizers, with data.</p></li><li><a class="t" href="../transcription-vs-summary/">Same transcription accuracy, three times the errors in the summary</a><p>Two recognizers with the same CER produced 3x the summary errors. Why a stricter summary prompt made it worse, and how to compare by summary quality.</p></li><li><a class="t" href="../digital-twin/">I built an AI copy of myself following prior research. Whatever I fed it, agreement stopped at 62–67%</a><p>Following prior research, I built an AI copy of myself. Diary or one line, agreement stayed at 62-67%. What identifies a person is how they speak.</p></li></ul>
   </div>
 </article>
 

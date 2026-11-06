@@ -3,30 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した｜Liner Notes</title>
-<meta name="description" content="Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
+<title>Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した</title>
+<meta name="description" content="Foundation Models の Private Cloud Compute(PCC)は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
 <meta name="author" content="Aves Inc.">
 <link rel="canonical" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
 <link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
 <link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
+<link rel="alternate" hreflang="x-default" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:site_name" content="Liner Notes">
 <meta property="og:title" content="Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した">
-<meta property="og:description" content="Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
+<meta property="og:description" content="Foundation Models の Private Cloud Compute(PCC)は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:url" content="https://linernotes.aves.ltd/blog/pcc-refusals/">
-<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/og/pcc-refusals-ja.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した">
-<meta name="twitter:description" content="Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
-<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:description" content="Foundation Models の Private Cloud Compute(PCC)は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/og/pcc-refusals-ja.png">
 <meta name="theme-color" content="#151009">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
 <link rel="apple-touch-icon" href="../../assets/favicon-180.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した","description":"Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/pcc-refusals/"}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した","description":"Foundation Models の Private Cloud Compute(PCC)は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"image":"https://linernotes.aves.ltd/assets/og/pcc-refusals-ja.png","mainEntityOfPage":"https://linernotes.aves.ltd/blog/pcc-refusals/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Liner Notes","item":"https://linernotes.aves.ltd/"},{"@type":"ListItem","position":2,"name":"開発ノート","item":"https://linernotes.aves.ltd/blog/"},{"@type":"ListItem","position":3,"name":"Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した","item":"https://linernotes.aves.ltd/blog/pcc-refusals/"}]}
 </script>
 <style>
 :root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
@@ -172,7 +178,7 @@ table.art td{white-space:normal;min-width:6.5em}
 <p>拒否とレート制限によって、アプリで4つの問題が起きていました。</p>
 <p>1つ目は、要約が黙って欠けたことです。PCC が失敗すると要約が作られず、「文字起こしはあるのに要約が無いメモ」が残りました。利用者には、アプリの不具合に見えます。</p>
 <p>2つ目は、安全装置が本番の PCC を止めたことです。生成の途中でアプリが落ちたら、その経路を止める安全装置を入れていました。ところが、バックグラウンドで期限切れになっただけの回を「落ちた」と数え、10月16日に本番で PCC がまるごと止まりました。</p>
-<p>3つ目は、1日の上限に当たっている最中に記録を消したことです。開発用の iPhone で人物像を一括で作り直したところ、1日およそ700回で上限に達し、以後のリクエストがすべて失敗しました。「古い記録を消してから作り直す」処理を上限中に走らせたので、消したあと作り直せず、記録が7件に減りました。</p>
+<p>3つ目は、1日の上限に当たっている最中に記録を消したことです。開発用の iPhone で人物像を一括で作り直した日、リクエストは1,158回になり、そのうち689回が上限のエラーで失敗しました。上限に達したあとのリクエストは、すべて失敗します。「古い記録を消してから作り直す」処理を上限中に走らせたので、消したあと作り直せず、記録が7件に減りました。</p>
 <p>4つ目は、毎朝の一括生成がレート制限に当たっていたことです。レート制限は、直前60秒のリクエストが8〜10回になると当たります。朝の一筆を7時台にまとめて作っていたので、本番の7時台は14回中3回しか成功していませんでした。</p>
 <figure class="viz" role="group" aria-label="時刻ごとの成功率(本番、リクエストが10回以上あった時刻)">
 <p class="vt">時刻ごとの成功率(本番、リクエストが10回以上あった時刻)</p>
@@ -242,6 +248,7 @@ table.art td{white-space:normal;min-width:6.5em}
 <h2>まとめ</h2>
 <ul><li>PCC を本番に入れる前に、自分のアプリの実際のリクエストで拒否率を測る。私のアプリでは10.6%だった</li><li>拒否されたときの代わりを先に決めておく。要約なら、文字起こしを先に保存して後から付け直す</li><li>レート制限は直前60秒に8〜10回で当たる。一括生成は時刻をばらす</li><li>1日の上限に当たったら、エラーの <code>resetDate</code> を読む。上限中に、消してから作り直す処理を走らせない</li><li>リクエストごとに機能と失敗の種類を記録し、どの機能が断られているかを見えるようにする</li></ul>
 <aside class="promo"><img src="../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>この記事は、iPhone の日記アプリ Liner Notes を作る中で測った結果です。Liner Notes は、一日の会話を iPhone の中で文字にして、夜に日記の下書きを置いてくれます。日記と自動の記録は無料で使えます。</p><a class="promo-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store で入手</a></div></aside>
+<h2>ほかの開発ノート</h2><ul class="posts"><li><a class="t" href="../background-neural-engine/">iOS のバックグラウンドで音声を処理するなら Neural Engine を使う</a><p>iOS のバックグラウンド(BGContinuedProcessingTask)では CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと直し方を、実機の数字で。</p></li><li><a class="t" href="../asr-benchmark/">ベンチマークだけで音声認識を選ぶと危ない。自分の用途の音声で測ると結果が変わる</a><p>読み上げのベンチマークでは Apple の音声認識が最良に見えたが、会話の音声では誤りが Parakeet の約1.8倍。日本語の音声認識を選ぶときの測り方と落とし穴を、数字で。</p></li><li><a class="t" href="../transcription-vs-summary/">文字起こしの精度が同じでも、要約の誤りは3倍違うことがある</a><p>文字誤り率が同じ2つの音声認識で、要約の誤りは3倍違った。要約の指示を厳しくすると誤りが増えた理由と、要約で比べる方法。</p></li><li><a class="t" href="../digital-twin/">先行研究の方法で自分のコピー AI を作ったが、何を学ばせても一致率は62〜67%で止まった</a><p>先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。</p></li></ul>
   </div>
 </article>
 

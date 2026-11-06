@@ -9,7 +9,7 @@
 <link rel="canonical" href="https://linernotes.aves.ltd/blog/on-device-diary/">
 <link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/on-device-diary/">
 <link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/on-device-diary/">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" content="noindex,follow">
 <meta property="og:site_name" content="Liner Notes">
 <meta property="og:title" content="iPhone の中だけで会話を文字にする日記アプリを作って分かった 5 つのこと">
 <meta property="og:description" content="iPhone の中で会話を文字にする日記アプリを作って分かった 5 つのこと。バックグラウンドで遅いのは CPU、読み上げベンチの罠、Apple PCC の拒否率 10.6% など、実機で測った数字。">
@@ -112,7 +112,7 @@ footer a:hover{color:var(--copper-l)}
 <tbody>
 <tr><th>614 回</th><td>130 回</td><td>65 回(10.6%)</td><td>59 回(9.6%)</td><td>0 回</td></tr>
 </tbody></table></div>
-<p>拒否されるのは普通の日記の下書きと会話の要約で、技術の打ち合わせの録音も拒否されます。拒否のレスポンスは 7.6〜12.7 秒かかり、成功(1〜3 秒)より長い。ストリーミングで返し始めてからフィルタが止めるからです。レート制限は 1 分間に 8〜10 回で当たり、朝の一括生成が毎日これに当たっていました。1 日の上限は開発機で約 700 回。正直に言うと、<code>resetDate</code> を返す API を読んでおらず、上限が iCloud アカウント単位で他のアプリと共有だということも知りませんでした。</p>
+<p>拒否されるのは普通の日記の下書きと会話の要約で、技術の打ち合わせの録音も拒否されます。拒否のレスポンスは 7.6〜12.7 秒かかり、成功(1〜3 秒)より長い。ストリーミングで返し始めてからフィルタが止めるからです。レート制限は 1 分間に 8〜10 回で当たり、朝の一括生成が毎日これに当たっていました。1 日の上限もあり、開発機では 1,158 回呼んだ日に 689 回が上限のエラーで失敗しました。正直に言うと、<code>resetDate</code> を返す API を読んでおらず、上限が iCloud アカウント単位で他のアプリと共有だということも知りませんでした。</p>
 <h2>5. 何を与えても「自分のコピー」は 62〜67% しか一致しない。人を見分けるのは話し方</h2>
 <p>LLM に自分の代わりをさせて、自分と同じ選択をするか測りました。与えた材料は、自己紹介の一行、日記 2 万トークン、価値観についての回答 31 問、面接 12 問。どれを与えても自分の選択との一致率は 0.62〜0.67 で、一行の自己紹介がいちばん高く(0.72)、自分の回答を足すとむしろ下がりました。</p>
 <p>一方で、話し方は相手によってはっきり変わります。発話の間(ま)は同僚と 1.6 秒、妻と 2.2 秒、娘と 2.8 秒、上司と 5.3 秒。一文の長さは家族には 20 字、同僚には 32 字。研究でも同じ方向の結果が出ています。声の抑揚だけで知り合いを識別できること、文章の真似は家族でも見抜けないこと、遺族は内容の正しさより口調で「その人らしい」と判断すること。つまり、その人らしさは「何を言うか」より「どう言うか」にあります。</p>

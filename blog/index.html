@@ -9,6 +9,7 @@
 <link rel="canonical" href="https://linernotes.aves.ltd/blog/">
 <link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/">
 <link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/">
+<link rel="alternate" hreflang="x-default" href="https://linernotes.aves.ltd/blog/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:site_name" content="Liner Notes">
 <meta property="og:title" content="開発ノート">
@@ -17,6 +18,8 @@
 <meta property="og:locale" content="ja_JP">
 <meta property="og:url" content="https://linernotes.aves.ltd/blog/">
 <meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="開発ノート">
 <meta name="twitter:description" content="Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。">
@@ -26,7 +29,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="apple-touch-icon" href="../assets/favicon-180.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"CollectionPage","headline":"開発ノート","description":"Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/"}
+{"@context":"https://schema.org","@type":"CollectionPage","headline":"開発ノート","description":"Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"image":"https://linernotes.aves.ltd/assets/hero-poster.jpg","mainEntityOfPage":"https://linernotes.aves.ltd/blog/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Liner Notes","item":"https://linernotes.aves.ltd/"},{"@type":"ListItem","position":2,"name":"開発ノート","item":"https://linernotes.aves.ltd/blog/"}]}
 </script>
 <style>
 :root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
@@ -130,7 +136,8 @@ table.art td{white-space:normal;min-width:6.5em}
 
 <article>
   <div class="wrap">
-<p>iPhone の中で一日の会話を文字にする日記アプリ Liner Notes を作る中で、ぶつかった問題と、測った数字と、直したことを書いています。</p><ul class="posts"><li><a class="t" href="background-neural-engine/">iOS のバックグラウンドで音声を処理するなら Neural Engine を使う</a><p>iOS のバックグラウンドでは、CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと、録音中に処理を終える直し方を、実機の数字で。</p></li><li><a class="t" href="asr-benchmark/">ベンチマークだけで音声認識を選ぶと危ない。自分の用途の音声で測ると結果が変わる</a><p>読み上げのベンチマークでは Apple の音声認識が最良に見えたが、会話の音声では誤りが Parakeet の約1.8倍。日本語の音声認識を選ぶときの測り方と落とし穴を、数字で。</p></li><li><a class="t" href="transcription-vs-summary/">文字起こしの精度が同じでも、要約の誤りは3倍違うことがある</a><p>文字誤り率が同じ2つの音声認識で、要約の誤りは3倍違った。要約の指示を厳しくすると誤りが増えた理由と、要約で比べる方法。</p></li><li><a class="t" href="pcc-refusals/">Apple の PCC は、本番のリクエストの10.6%を「不適切」として拒否した</a><p>Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。</p></li><li><a class="t" href="digital-twin/">先行研究の方法で自分のコピー AI を作ったが、何を学ばせても一致率は62〜67%で止まった</a><p>先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。</p></li><li><a class="t" href="on-device-diary/">iPhone の中だけで会話を文字にする日記アプリを作って分かった 5 つのこと</a><p>5本の要点を1本にまとめた短い版。</p></li></ul>
+<p>iPhone の中で一日の会話を文字にする日記アプリ Liner Notes を作る中で、ぶつかった問題と、測った数字と、直したことを書いています。</p><ul class="posts"><li><a class="t" href="background-neural-engine/">iOS のバックグラウンドで音声を処理するなら Neural Engine を使う</a><p>iOS のバックグラウンド(BGContinuedProcessingTask)では CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと直し方を、実機の数字で。</p></li><li><a class="t" href="asr-benchmark/">ベンチマークだけで音声認識を選ぶと危ない。自分の用途の音声で測ると結果が変わる</a><p>読み上げのベンチマークでは Apple の音声認識が最良に見えたが、会話の音声では誤りが Parakeet の約1.8倍。日本語の音声認識を選ぶときの測り方と落とし穴を、数字で。</p></li><li><a class="t" href="transcription-vs-summary/">文字起こしの精度が同じでも、要約の誤りは3倍違うことがある</a><p>文字誤り率が同じ2つの音声認識で、要約の誤りは3倍違った。要約の指示を厳しくすると誤りが増えた理由と、要約で比べる方法。</p></li><li><a class="t" href="pcc-refusals/">Apple の PCC は、本番のリクエストの10.6%を「不適切」として拒否した</a><p>Foundation Models の Private Cloud Compute(PCC)は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。</p></li><li><a class="t" href="digital-twin/">先行研究の方法で自分のコピー AI を作ったが、何を学ばせても一致率は62〜67%で止まった</a><p>先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。</p></li><li><a class="t" href="on-device-diary/">iPhone の中だけで会話を文字にする日記アプリを作って分かった 5 つのこと</a><p>5本の要点を1本にまとめた短い版。</p></li></ul>
+
   </div>
 </article>
 

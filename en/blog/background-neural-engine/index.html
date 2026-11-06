@@ -3,30 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>On iOS, run background audio processing on the Neural Engine｜Liner Notes</title>
-<meta name="description" content="In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.">
+<title>On iOS, run background audio processing on the Neural Engine</title>
+<meta name="description" content="In an iOS BGContinuedProcessingTask, CPU work ran 12-21x slower while Core ML on the Neural Engine stayed within 2x. Three causes and the fix, measured.">
 <meta name="author" content="Aves Inc.">
 <link rel="canonical" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
 <link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/background-neural-engine/">
 <link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
+<link rel="alternate" hreflang="x-default" href="https://linernotes.aves.ltd/blog/background-neural-engine/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:site_name" content="Liner Notes">
 <meta property="og:title" content="On iOS, run background audio processing on the Neural Engine">
-<meta property="og:description" content="In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.">
+<meta property="og:description" content="In an iOS BGContinuedProcessingTask, CPU work ran 12-21x slower while Core ML on the Neural Engine stayed within 2x. Three causes and the fix, measured.">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
-<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/og/background-neural-engine-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="On iOS, run background audio processing on the Neural Engine">
-<meta name="twitter:description" content="In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.">
-<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:description" content="In an iOS BGContinuedProcessingTask, CPU work ran 12-21x slower while Core ML on the Neural Engine stayed within 2x. Three causes and the fix, measured.">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/og/background-neural-engine-en.png">
 <meta name="theme-color" content="#151009">
 <link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/favicon-32.png">
 <link rel="apple-touch-icon" href="../../../assets/favicon-180.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"On iOS, run background audio processing on the Neural Engine","description":"In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/background-neural-engine/"}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"On iOS, run background audio processing on the Neural Engine","description":"In an iOS BGContinuedProcessingTask, CPU work ran 12-21x slower while Core ML on the Neural Engine stayed within 2x. Three causes and the fix, measured.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"image":"https://linernotes.aves.ltd/assets/og/background-neural-engine-en.png","mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/background-neural-engine/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Liner Notes","item":"https://linernotes.aves.ltd/en/"},{"@type":"ListItem","position":2,"name":"Engineering notes","item":"https://linernotes.aves.ltd/en/blog/"},{"@type":"ListItem","position":3,"name":"On iOS, run background audio processing on the Neural Engine","item":"https://linernotes.aves.ltd/en/blog/background-neural-engine/"}]}
 </script>
 <style>
 :root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
@@ -260,6 +266,7 @@ table.art td{white-space:normal;min-width:6.5em}
 <ul><li>If you process audio in the background, put as much of it as you can on the Neural Engine. The same job was within 2× on the Neural Engine and 12–21× slower on the CPU</li><li>When something is slow in the background, suspect the CPU pre- and post-processing before the model</li><li>With <code>beginBackgroundTask</code>, end your work when the grace period runs out. If you ignore the deadline, iOS terminates the app without a record</li><li>Do not call Core ML from a <code>.background</code>-priority task. It is 3.6× slower even in the foreground</li><li>In a recording app, do the heavy work while recording. With the microphone open, the background runs at foreground speed</li><li>A continued-processing task may never start. Save intermediate results first</li></ul>
 <p>The measurement app and its data are on GitHub (<a href="https://github.com/yamannyama/granite-speech-coreml" style="color:var(--copper-l);text-decoration:underline;text-underline-offset:3px">yamannyama/granite-speech-coreml</a>).</p>
 <aside class="promo"><img src="../../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>These measurements come from building Liner Notes, an iPhone diary app. Liner Notes turns the day’s conversations into text on your iPhone and leaves a diary draft for you in the evening. The diary and automatic records are free.</p><a class="promo-cta" href="https://apps.apple.com/us/app/id6787426245">Get it on the App Store</a></div></aside>
+<h2>More engineering notes</h2><ul class="posts"><li><a class="t" href="../asr-benchmark/">Choosing a speech recognizer by benchmark alone is risky. Measure with the audio your app actually handles</a><p>On read speech Apple&#x27;s recognizer looked best; on conversation its error rate was 1.8x Parakeet&#x27;s. How to compare Japanese speech recognizers, with data.</p></li><li><a class="t" href="../transcription-vs-summary/">Same transcription accuracy, three times the errors in the summary</a><p>Two recognizers with the same CER produced 3x the summary errors. Why a stricter summary prompt made it worse, and how to compare by summary quality.</p></li><li><a class="t" href="../pcc-refusals/">Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s requests as unsafe</a><p>Apple&#x27;s Private Cloud Compute (Foundation Models) refused 10.6% of 614 production requests and rate-limited 9.6%. What broke and how I redesigned.</p></li><li><a class="t" href="../digital-twin/">I built an AI copy of myself following prior research. Whatever I fed it, agreement stopped at 62–67%</a><p>Following prior research, I built an AI copy of myself. Diary or one line, agreement stayed at 62-67%. What identifies a person is how they speak.</p></li></ul>
   </div>
 </article>
 
