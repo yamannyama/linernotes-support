@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>開発ノート｜Liner Notes</title>
+<meta name="description" content="Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/blog/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="開発ノート">
+<meta property="og:description" content="Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://linernotes.aves.ltd/blog/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="開発ノート">
+<meta name="twitter:description" content="Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","headline":"開発ノート","description":"Liner Notes の開発ノート。iOS のバックグラウンド処理、音声認識の選び方、要約の品質、Apple PCC の本番運用、自分のコピー AI。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../"><img src="../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../blog/">Engineering notes</a></p>
+    <h1>開発ノート</h1>
+    <p class="meta"><a href="https://linernotes.aves.ltd/en/blog/">English</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>iPhone の中で一日の会話を文字にする日記アプリ Liner Notes を作る中で、ぶつかった問題と、測った数字と、直したことを書いています。</p><ul class="posts"><li><a class="t" href="background-neural-engine/">iOS のバックグラウンドで音声を処理するなら Neural Engine を使う</a><p>iOS のバックグラウンドでは、CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと、録音中に処理を終える直し方を、実機の数字で。</p></li><li><a class="t" href="asr-benchmark/">ベンチマークだけで音声認識を選ぶと危ない。自分の用途の音声で測ると結果が変わる</a><p>読み上げのベンチマークでは Apple の音声認識が最良に見えたが、会話の音声では誤りが Parakeet の約1.8倍。日本語の音声認識を選ぶときの測り方と落とし穴を、数字で。</p></li><li><a class="t" href="transcription-vs-summary/">文字起こしの精度が同じでも、要約の誤りは3倍違うことがある</a><p>文字誤り率が同じ2つの音声認識で、要約の誤りは3倍違った。要約の指示を厳しくすると誤りが増えた理由と、要約で比べる方法。</p></li><li><a class="t" href="pcc-refusals/">Apple の PCC は、本番のリクエストの10.6%を「不適切」として拒否した</a><p>Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。</p></li><li><a class="t" href="digital-twin/">先行研究の方法で自分のコピー AI を作ったが、何を学ばせても一致率は62〜67%で止まった</a><p>先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。</p></li><li><a class="t" href="on-device-diary/">iPhone の中だけで会話を文字にする日記アプリを作って分かった 5 つのこと</a><p>5本の要点を1本にまとめた短い版。</p></li></ul>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../">Liner Notes</a>
+    <a href="../blog/">開発ノート</a>
+    <a href="../support.html">サポート</a>
+    <a href="../privacy.html">プライバシーポリシー</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">運営会社</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>

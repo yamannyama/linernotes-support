@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple PCC refused 10.6% of my app&#x27;s production requests｜Liner Notes</title>
+<meta name="description" content="Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="Apple PCC refused 10.6% of my app&#x27;s production requests">
+<meta property="og:description" content="Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apple PCC refused 10.6% of my app&#x27;s production requests">
+<meta name="twitter:description" content="Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple PCC refused 10.6% of my app&#x27;s production requests","description":"Apple&#x27;s Private Cloud Compute refused 10.6% of 614 production requests and rate-limited 9.6%. The failures it caused and how I redesigned around them.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/pcc-refusals/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../../en/"><img src="../../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/us/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../../../en/blog/">Engineering notes</a></p>
+    <h1>Apple&#x27;s Private Cloud Compute refused 10.6% of my app&#x27;s production requests as &quot;unsafe&quot;</h1>
+    <p class="meta">November 6, 2026 · Liner Notes · <a href="https://linernotes.aves.ltd/blog/pcc-refusals/">日本語版</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>I moved diary summaries and a short morning note from OpenAI to Apple's Private Cloud Compute (PCC). Counting 41 days of production logs, 65 of 614 requests (10.6%) were refused as "may contain sensitive or unsafe content," and 59 (9.6%) were rate-limited. What got refused was ordinary diary text and conversation summaries. Here are the failures this caused and how I rebuilt around them.</p>
+<h2>What I wanted to do</h2>
+<p>Liner Notes, my iPhone diary app, uses a language model for conversation summaries, a short note every morning, titles for records, and the roles of speakers in a conversation. It started out on OpenAI's API.</p>
+<p>At the end of September 2026 I moved these to PCC, which lets an iOS app call Apple's server-side language model through the Foundation Models framework. The app pays nothing, and requests are not retained on Apple's servers. For an app that handles conversations, both are big advantages.</p>
+<h2>Counting the production logs</h2>
+<p>I noticed memos with no summary and counted the production logs (my own iPhone, 41 days).</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Requests</th><th>Failed</th><th>Refused as unsafe</th><th>Rate-limited</th><th>Daily quota</th><th>Cancelled, other</th></tr></thead>
+<tbody>
+<tr><th>614</th><td>130 (21%)</td><td>65 (10.6%)</td><td>59 (9.6%)</td><td>0</td><td>6</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="Breakdown of 614 production requests (41 days)">
+<p class="vt">Breakdown of 614 production requests (41 days)</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Succeeded 484 (78.8%)</span><span><i style="background:var(--s2)"></i>Refused as unsafe 65 (10.6%)</span><span><i style="background:var(--s3)"></i>Rate-limited 59 (9.6%)</span><span><i style="background:var(--s4)"></i>Cancelled, other 6 (1.0%)</span></div>
+<div class="vstack"><span style="width:78.83%;background:var(--s1)" title="Succeeded: 484(78.8%)"></span><span style="width:10.59%;background:var(--s2)" title="Refused as unsafe: 65(10.6%)"></span><span style="width:9.61%;background:var(--s3)" title="Rate-limited: 59(9.6%)"></span><span style="width:0.98%;background:var(--s4)" title="Cancelled, other: 6(1.0%)"></span></div>
+<details><summary>Show as a table</summary><table><thead><tr><th>Item</th><th>Value</th><th>Share</th></tr></thead><tbody><tr><td>Succeeded</td><td>484</td><td>78.8%</td></tr><tr><td>Refused as unsafe</td><td>65</td><td>10.6%</td></tr><tr><td>Rate-limited</td><td>59</td><td>9.6%</td></tr><tr><td>Cancelled, other</td><td>6</td><td>1.0%</td></tr></tbody></table></details>
+</figure>
+<p>The refusals came with three messages.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Message</th><th>Count</th></tr></thead>
+<tbody>
+<tr><th>Streamed response may contain sensitive or unsafe content</th><td>41</td></tr>
+<tr><th>Safety guardrail was triggered.</th><td>18</td></tr>
+<tr><th>Response may contain sensitive or unsafe content</th><td>6</td></tr>
+</tbody></table></div>
+<p>What got refused was diary drafts and conversation summaries, nothing sexual or violent. A summary of a technical meeting was refused too. For Apple's on-device model, developers have repeatedly reported on the forums that it refuses ordinary requests too often. The same thing happens with server-side PCC.</p>
+<p>Refusals are also slow. A success comes back in 1–3 seconds; a refusal took 7.6–12.7 seconds, because the response starts streaming and the filter stops it partway through.</p>
+<figure class="viz" role="group" aria-label="Time until a response">
+<p class="vt">Time until a response</p>
+<p class="vu">Seconds (drawn at the middle of each range)</p>
+<div class="vgroup"><div class="vlabel">Success</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:18.85%;background:var(--s1)" title="Success: 1–3 s"></span></div><span class="vval">1–3 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Refusal</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="Refusal: 7.6–12.7 s"></span></div><span class="vval">7.6–12.7 s</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Success</td><td>1–3 s</td></tr><tr><td>Refusal</td><td>7.6–12.7 s</td></tr></tbody></table></details>
+</figure>
+<h2>The problems this caused</h2>
+<p>Refusals and rate limits caused four problems in the app.</p>
+<p>First, summaries went missing silently. When PCC failed, no summary was made, leaving memos with a transcript but no summary. To users that looks like a bug.</p>
+<p>Second, a safety switch shut PCC off in production. I had a switch that disables a generation path if the app crashes in the middle of it. It counted a background task that merely expired as a crash, and on October 16 it turned off PCC entirely in production.</p>
+<p>Third, I deleted records while over the daily quota. On a development iPhone I regenerated person profiles in bulk, hit the quota at about 700 requests in a day, and every request after that failed. The job deleted old records before regenerating them, so once they were deleted they could not be rebuilt, and the records dropped to 7.</p>
+<p>Fourth, the morning batch hit the rate limit. The limit kicks in at 8–10 requests in the previous 60 seconds. The morning notes were generated together in the 7 o'clock hour, and in production only 3 of 14 requests in that hour succeeded.</p>
+<figure class="viz" role="group" aria-label="Success rate by hour (production, hours with 10+ requests, JST)">
+<p class="vt">Success rate by hour (production, hours with 10+ requests, JST)</p>
+<p class="vu">%</p>
+<div class="vgroup"><div class="vlabel">0:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:83.00%;background:var(--s1)" title="0:00: 83% (10/12)"></span></div><span class="vval">83% (10/12)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">7:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:21.00%;background:var(--s1)" title="7:00: 21% (3/14)"></span></div><span class="vval">21% (3/14)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">8:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:79.00%;background:var(--s1)" title="8:00: 79% (38/48)"></span></div><span class="vval">79% (38/48)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">9:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:70.00%;background:var(--s1)" title="9:00: 70% (14/20)"></span></div><span class="vval">70% (14/20)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">10:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:53.00%;background:var(--s1)" title="10:00: 53% (60/114)"></span></div><span class="vval">53% (60/114)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">12:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:82.00%;background:var(--s1)" title="12:00: 82% (31/38)"></span></div><span class="vval">82% (31/38)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">13:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:86.00%;background:var(--s1)" title="13:00: 86% (38/44)"></span></div><span class="vval">86% (38/44)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">14:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.00%;background:var(--s1)" title="14:00: 96% (22/23)"></span></div><span class="vval">96% (22/23)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">16:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:97.00%;background:var(--s1)" title="16:00: 97% (31/32)"></span></div><span class="vval">97% (31/32)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">18:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:76.00%;background:var(--s1)" title="18:00: 76% (25/33)"></span></div><span class="vval">76% (25/33)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">19:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:82.00%;background:var(--s1)" title="19:00: 82% (28/34)"></span></div><span class="vval">82% (28/34)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">20:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:93.00%;background:var(--s1)" title="20:00: 93% (14/15)"></span></div><span class="vval">93% (14/15)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">21:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:97.00%;background:var(--s1)" title="21:00: 97% (31/32)"></span></div><span class="vval">97% (31/32)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">22:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.00%;background:var(--s1)" title="22:00: 90% (54/60)"></span></div><span class="vval">90% (54/60)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">23:00</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.00%;background:var(--s1)" title="23:00: 90% (55/61)"></span></div><span class="vval">90% (55/61)</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>0:00</td><td>83% (10/12)</td></tr><tr><td>7:00</td><td>21% (3/14)</td></tr><tr><td>8:00</td><td>79% (38/48)</td></tr><tr><td>9:00</td><td>70% (14/20)</td></tr><tr><td>10:00</td><td>53% (60/114)</td></tr><tr><td>12:00</td><td>82% (31/38)</td></tr><tr><td>13:00</td><td>86% (38/44)</td></tr><tr><td>14:00</td><td>96% (22/23)</td></tr><tr><td>16:00</td><td>97% (31/32)</td></tr><tr><td>18:00</td><td>76% (25/33)</td></tr><tr><td>19:00</td><td>82% (28/34)</td></tr><tr><td>20:00</td><td>93% (14/15)</td></tr><tr><td>21:00</td><td>97% (31/32)</td></tr><tr><td>22:00</td><td>90% (54/60)</td></tr><tr><td>23:00</td><td>90% (55/61)</td></tr></tbody></table></details>
+</figure>
+<p>The success rate drops at 7:00 and at 10:00, the busiest hour. Both are hours when generation was batched.</p>
+<h2>Trying to reduce refusals</h2>
+<p>Input length made no difference between refused and accepted requests (both 873 and 2,174 characters were refused). I could not tell which words trigger a refusal, and I have not found a way to reduce refusals by rewording the prompt. So I treated refusals as something that will happen and changed the design.</p>
+<h2>What I rebuilt</h2>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Problem</th><th>Change</th></tr></thead>
+<tbody>
+<tr><th>Summaries go missing silently</th><td>Fall back to the on-device model. Conversations are not sent to OpenAI by policy, so on-device is the only fallback</td></tr>
+<tr><th>A missing summary looks like a bug</th><td>Save the transcript first and add the summary later. Even if refused, the transcript is readable</td></tr>
+<tr><th>The safety switch misfires</th><td>A background expiration is not counted as a crash</td></tr>
+<tr><th>Records deleted while over quota</th><td>Bulk jobs at most 2–3 times a day; never run delete-then-regenerate while over quota</td></tr>
+<tr><th>The morning batch hits the rate limit</th><td>Spread generation over time</td></tr>
+<tr><th>No way to tell which feature is refused</th><td>Log the feature, the duration and the failure type (refusal, rate limit, quota) for every request</td></tr>
+</tbody></table></div>
+<p>When you hit the daily quota, the error carries the time it resets (<code>resetDate</code>), and <code>quotaUsage</code> shows what is left. I had not read it and was puzzled that "it still hasn't come back the next morning." The quota is reportedly per iCloud account rather than per app.</p>
+<h2>Summary</h2>
+<ul><li>Before putting PCC in production, measure the refusal rate on your app's real requests. In my app it was 10.6%</li><li>Decide the fallback for a refusal in advance. For summaries, save the transcript first and add the summary later</li><li>The rate limit kicks in at 8–10 requests in 60 seconds. Spread batch generation over time</li><li>When you hit the daily quota, read <code>resetDate</code> from the error. Never run delete-then-regenerate while over quota</li><li>Log the feature and failure type for every request so you can see which feature is being refused</li></ul>
+<aside class="promo"><img src="../../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>These measurements come from building Liner Notes, an iPhone diary app. Liner Notes turns the day’s conversations into text on your iPhone and leaves a diary draft for you in the evening. The diary and automatic records are free.</p><a class="promo-cta" href="https://apps.apple.com/us/app/id6787426245">Get it on the App Store</a></div></aside>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../../../en/">Liner Notes</a>
+    <a href="../../../en/blog/">Engineering notes</a>
+    <a href="../../../en/support.html">Support</a>
+    <a href="../../../en/privacy.html">Privacy</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">Company</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>

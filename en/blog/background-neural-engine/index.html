@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On iOS, run background audio processing on the Neural Engine｜Liner Notes</title>
+<meta name="description" content="In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/background-neural-engine/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="On iOS, run background audio processing on the Neural Engine">
+<meta property="og:description" content="In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="On iOS, run background audio processing on the Neural Engine">
+<meta name="twitter:description" content="In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"On iOS, run background audio processing on the Neural Engine","description":"In the iOS background, CPU work ran 12-21x slower while the Neural Engine stayed within 2x. Three causes of silent kills and the fix, with measurements.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/background-neural-engine/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../../en/"><img src="../../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/us/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../../../en/blog/">Engineering notes</a></p>
+    <h1>On iOS, run background audio processing on the Neural Engine</h1>
+    <p class="meta">November 6, 2026 · Liner Notes · <a href="https://linernotes.aves.ltd/blog/background-neural-engine/">日本語版</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>I tried to process a recorded conversation while my iPhone app was in the background. A step that takes 33 seconds in the foreground had not finished after 5 minutes, and then the app disappeared without leaving any record. Three problems turned out to be stacked on top of each other. The biggest one: in the background, only work that runs on the CPU slows down. Inference on the Neural Engine barely slows down at all. The same job was 12–21× slower on the CPU and within 2× on the Neural Engine. If you process audio in the background, put as much of it as you can on the Neural Engine. Here is how I found that out and what I changed.</p>
+<h2>What I wanted to do</h2>
+<p>I build Liner Notes, an iPhone diary app that turns conversations into text on the device. After a recording stops, an "ingest" step separates speakers, transcribes, and summarizes. For a 44-minute recording it takes about 4 minutes in the foreground. People switch to another app as soon as they stop recording, so I wanted this step to finish in the background.</p>
+<h2>The kinds of background execution on iOS</h2>
+<p>On iOS, how long an app may run in the background depends on the mechanism.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Mechanism</th><th>How long it can run</th><th>Meant for</th></tr></thead>
+<tbody>
+<tr><th>beginBackgroundTask</th><td>About 30 seconds</td><td>Finishing work right before the app leaves the screen</td></tr>
+<tr><th>BGProcessingTask</th><td>The system picks the time</td><td>Work that can wait (overnight while charging, for example)</td></tr>
+<tr><th>BGContinuedProcessingTask (iOS 26+)</th><td>As long as it keeps reporting progress</td><td>Long work the user started; progress is shown on screen</td></tr>
+<tr><th>Audio background mode</th><td>While recording or playing</td><td>Recording and music apps</td></tr>
+</tbody></table></div>
+<p>The ingest is long work that starts when the user stops recording, so I used BGContinuedProcessingTask.</p>
+<h2>What happened: slow, and then gone without a trace</h2>
+<p>The "separate voices" step, 33 seconds in the foreground, had not finished after 5 minutes in the background. Eventually the whole process disappeared. No crash log, no expiration callback, no out-of-memory record.</p>
+<p>In my logs, 18 of 62 continued-processing requests had not started after 10 minutes, and the ones that did start disappeared after 40–627 seconds. Apple's developer forums have a post about the same thing ("4–5× slower in the background") with no known cause.</p>
+<h2>What I tried first: rest the CPU, report progress more often</h2>
+<p>My first guess was that iOS was stopping the app for using too much CPU, so I added pauses between steps. The work got slower and kept disappearing just as often.</p>
+<p>Next, the forums said a task is cut off if its progress stalls for about 30 seconds. I added a heartbeat that advanced progress every 5 seconds from off the main thread. The app still disappeared 25 seconds in, and the heartbeat log showed progress had never stalled. The cause was somewhere else.</p>
+<h2>Cause 1: my own code ignored the deadline</h2>
+<p>The ingest started with <code>beginBackgroundTask(expirationHandler: nil)</code>. Written this way, when the grace period runs out about 30 seconds after the app leaves the screen, the app does not end its own work, and iOS terminates it without a record. The 18 requests that seemed never to start were actually being killed this way, 30–55 seconds in.</p>
+<p>Once the app ended its own work when the grace period ran out, the silent disappearances stopped. A 29-minute conversation now finished and saved in 2 minutes 15 seconds entirely in the background. It was still slow, though.</p>
+<h2>Cause 2: only CPU work was running on slow cores</h2>
+<p>To find out what was slow, I built a measurement app. It runs the same Core ML job (transcribing 10 minutes of Japanese speech) with different compute units and app states. iPhone 16, iOS 27, median of two runs.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Compute units</th><th>Foreground</th><th>Background (continued processing)</th><th>Background (while recording)</th></tr></thead>
+<tbody>
+<tr><th>Neural Engine</th><td>2.2 s</td><td>4.3 s (2×)</td><td>2.4 s</td></tr>
+<tr><th>CPU only</th><td>8.4 s</td><td>102–174 s (12–21×)</td><td>7.3 s</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="Time to transcribe 10 minutes of Japanese speech">
+<p class="vt">Time to transcribe 10 minutes of Japanese speech</p>
+<p class="vu">Seconds (shorter is faster). CPU-only in the background is drawn at the middle of 102–174 s</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Neural Engine</span><span><i style="background:var(--s2)"></i>CPU only</span></div>
+<div class="vgroup"><div class="vlabel">Foreground</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:1.53%;background:var(--s1)" title="Foreground / Neural Engine: 2.2 s"></span></div><span class="vval">2.2 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:5.85%;background:var(--s2)" title="Foreground / CPU only: 8.4 s"></span></div><span class="vval">8.4 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Background (continued processing)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:3.00%;background:var(--s1)" title="Background (continued processing) / Neural Engine: 4.3 s"></span></div><span class="vval">4.3 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s2)" title="Background (continued processing) / CPU only: 102–174 s"></span></div><span class="vval">102–174 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Background (while recording)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:1.67%;background:var(--s1)" title="Background (while recording) / Neural Engine: 2.4 s"></span></div><span class="vval">2.4 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:5.09%;background:var(--s2)" title="Background (while recording) / CPU only: 7.3 s"></span></div><span class="vval">7.3 s</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th></th><th>Neural Engine</th><th>CPU only</th></tr></thead><tbody><tr><td>Foreground</td><td>2.2 s</td><td>8.4 s</td></tr><tr><td>Background (continued processing)</td><td>4.3 s</td><td>102–174 s</td></tr><tr><td>Background (while recording)</td><td>2.4 s</td><td>7.3 s</td></tr></tbody></table></details>
+</figure>
+<p>Neural Engine inference stays within 2×; only CPU work is 12–21× slower. While recording (with the microphone open), both run at foreground speed even in the background.</p>
+<p>To see why the CPU was slow, I read the process's CPU time and energy from task_info.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>CPU-only job</th><th>Elapsed time</th><th>CPU time used</th><th>Energy (foreground = 1)</th></tr></thead>
+<tbody>
+<tr><th>Foreground</th><td>8.7 s</td><td>7.9 s</td><td>1</td></tr>
+<tr><th>Background</th><td>112 s</td><td>86 s</td><td>0.22</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="Elapsed time and CPU time for the CPU-only job">
+<p class="vt">Elapsed time and CPU time for the CPU-only job</p>
+<p class="vu">Seconds. Even in the background, the process gets CPU time for almost the whole elapsed time</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Elapsed</span><span><i style="background:var(--s2)"></i>CPU time</span></div>
+<div class="vgroup"><div class="vlabel">Foreground</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:7.47%;background:var(--s1)" title="Foreground / Elapsed: 8.7 s"></span></div><span class="vval">8.7 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:6.78%;background:var(--s2)" title="Foreground / CPU time: 7.9 s"></span></div><span class="vval">7.9 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Background</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="Background / Elapsed: 112 s"></span></div><span class="vval">112 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:73.83%;background:var(--s2)" title="Background / CPU time: 86 s"></span></div><span class="vval">86 s</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th></th><th>Elapsed</th><th>CPU time</th></tr></thead><tbody><tr><td>Foreground</td><td>8.7 s</td><td>7.9 s</td></tr><tr><td>Background</td><td>112 s</td><td>86 s</td></tr></tbody></table></details>
+</figure>
+<p>Even in the background, the process is given CPU time for most of the elapsed time. Yet it needs 11× the CPU time to finish the same job, at 1/4.6 of the energy. The numbers all fit if the work is not being starved of CPU but is running on the low-power cores at a low clock. I have not looked at core placement in Instruments, so this is an inference.</p>
+<p>The audio is processed in chunks of up to 20 seconds, so I also looked at the time per chunk. In the background it is slow from the very first chunk, and sometimes it switches to an even slower stretch partway through.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Time per chunk</th><th>CPU only</th></tr></thead>
+<tbody>
+<tr><th>Foreground</th><td>0.14 s</td></tr>
+<tr><th>Background (from the first chunk)</th><td>1.7 s</td></tr>
+<tr><th>Background (slow stretch)</th><td>About 8 s</td></tr>
+</tbody></table></div>
+<p>Apple's forums have a separate report that "even in the foreground, threads are moved to efficiency cores after 30 seconds of sustained load." Here it is slow from the first chunk, so it is a different phenomenon.</p>
+<p>One more finding: if the task that calls Core ML has <code>.background</code> priority, Neural Engine inference is 3.6× slower even in the foreground. CPU work did not change with priority.</p>
+<figure class="viz" role="group" aria-label="Time by task priority (foreground)">
+<p class="vt">Time by task priority (foreground)</p>
+<p class="vu">Seconds</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Neural Engine</span><span><i style="background:var(--s2)"></i>CPU only</span></div>
+<div class="vgroup"><div class="vlabel">userInitiated</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:25.16%;background:var(--s1)" title="userInitiated / Neural Engine: 2.2 s"></span></div><span class="vval">2.2 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s2)" title="userInitiated / CPU only: 8.4 s"></span></div><span class="vval">8.4 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">utility</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:32.63%;background:var(--s1)" title="utility / Neural Engine: 2.8 s"></span></div><span class="vval">2.8 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:86.96%;background:var(--s2)" title="utility / CPU only: 7.6 s"></span></div><span class="vval">7.6 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">background</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.30%;background:var(--s1)" title="background / Neural Engine: 7.9 s"></span></div><span class="vval">7.9 s</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:95.46%;background:var(--s2)" title="background / CPU only: 8.3 s"></span></div><span class="vval">8.3 s</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th></th><th>Neural Engine</th><th>CPU only</th></tr></thead><tbody><tr><td>userInitiated</td><td>2.2 s</td><td>8.4 s</td></tr><tr><td>utility</td><td>2.8 s</td><td>7.6 s</td></tr><tr><td>background</td><td>7.9 s</td><td>8.3 s</td></tr></tbody></table></details>
+</figure>
+<p>The "separate voices" step that kept disappearing includes CPU work such as converting audio and cutting it into segments, and I believe that is what slowed down.</p>
+<h2>Cause 3: sometimes the continued-processing task never starts</h2>
+<p>Even after fixing 1 and 2, I reproduced a case where a continued-processing request did not start for more than 9 minutes. That is iOS behavior; the app cannot fix it.</p>
+<h2>What I changed: finish the heavy work while recording</h2>
+<p>While recording, the app runs at foreground speed even in the background, so I moved the heavy parts of the ingest into the recording itself. After the recording stops, the app only uses those results.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Work</th><th>Before (after the recording stopped)</th><th>Now (while recording)</th></tr></thead>
+<tbody>
+<tr><th>Transcription</th><td>The whole recording at once</td><td>Every 12 seconds while recording</td></tr>
+<tr><th>Voice separation</th><td>Re-streaming the recording (over 5 minutes in the background)</td><td>Done while recording; 0.3 s after stopping</td></tr>
+<tr><th>Laughter detection</th><td>167 s for a 29-minute recording</td><td>Done while recording; 0 s after stopping</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="Time after the recording stops (laughter detection, 29-minute recording, background)">
+<p class="vt">Time after the recording stops (laughter detection, 29-minute recording, background)</p>
+<p class="vu">Seconds</p>
+<div class="vgroup"><div class="vlabel">Before (detect after recording)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="Before (detect after recording): 167 s"></span></div><span class="vval">167 s</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Now (use results from the recording)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:0.00%;background:var(--s1)" title="Now (use results from the recording): 0 s"></span></div><span class="vval">0 s</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Before (detect after recording)</td><td>167 s</td></tr><tr><td>Now (use results from the recording)</td><td>0 s</td></tr></tbody></table></details>
+</figure>
+<p>Work that cannot be done during the recording runs on the Neural Engine, with Core ML's compute units set to <code>.cpuAndNeuralEngine</code>. The GPU is not available in the background, so <code>.all</code> gains nothing there.</p>
+<p>In case the continued-processing task never starts, the transcript is saved the moment the recording stops, and the summary is added the next time the app opens.</p>
+<p>The only heavy work left after the recording stops is re-sorting speakers. For a 10-minute recording it took 28 s in the background: 8 s for segmentation and embeddings, 0.5 s for CPU clustering, and the rest loading models.</p>
+<h2>Summary</h2>
+<ul><li>If you process audio in the background, put as much of it as you can on the Neural Engine. The same job was within 2× on the Neural Engine and 12–21× slower on the CPU</li><li>When something is slow in the background, suspect the CPU pre- and post-processing before the model</li><li>With <code>beginBackgroundTask</code>, end your work when the grace period runs out. If you ignore the deadline, iOS terminates the app without a record</li><li>Do not call Core ML from a <code>.background</code>-priority task. It is 3.6× slower even in the foreground</li><li>In a recording app, do the heavy work while recording. With the microphone open, the background runs at foreground speed</li><li>A continued-processing task may never start. Save intermediate results first</li></ul>
+<p>The measurement app and its data are on GitHub (<a href="https://github.com/yamannyama/granite-speech-coreml" style="color:var(--copper-l);text-decoration:underline;text-underline-offset:3px">yamannyama/granite-speech-coreml</a>).</p>
+<aside class="promo"><img src="../../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>These measurements come from building Liner Notes, an iPhone diary app. Liner Notes turns the day’s conversations into text on your iPhone and leaves a diary draft for you in the evening. The diary and automatic records are free.</p><a class="promo-cta" href="https://apps.apple.com/us/app/id6787426245">Get it on the App Store</a></div></aside>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../../../en/">Liner Notes</a>
+    <a href="../../../en/blog/">Engineering notes</a>
+    <a href="../../../en/support.html">Support</a>
+    <a href="../../../en/privacy.html">Privacy</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">Company</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>

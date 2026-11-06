@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iOS のバックグラウンドで音声を処理するなら Neural Engine を使う｜Liner Notes</title>
+<meta name="description" content="iOS のバックグラウンドでは、CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと、録音中に処理を終える直し方を、実機の数字で。">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/blog/background-neural-engine/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/background-neural-engine/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="iOS のバックグラウンドで音声を処理するなら Neural Engine を使う">
+<meta property="og:description" content="iOS のバックグラウンドでは、CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと、録音中に処理を終える直し方を、実機の数字で。">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://linernotes.aves.ltd/blog/background-neural-engine/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="iOS のバックグラウンドで音声を処理するなら Neural Engine を使う">
+<meta name="twitter:description" content="iOS のバックグラウンドでは、CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと、録音中に処理を終える直し方を、実機の数字で。">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"iOS のバックグラウンドで音声を処理するなら Neural Engine を使う","description":"iOS のバックグラウンドでは、CPU の処理だけが12〜21倍遅くなり、Neural Engine は2倍以内だった。黙って消える原因3つと、録音中に処理を終える直し方を、実機の数字で。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/background-neural-engine/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../"><img src="../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../../blog/">Engineering notes</a></p>
+    <h1>iOS のバックグラウンドで音声を処理するなら Neural Engine を使う</h1>
+    <p class="meta">2026 年 11 月 6 日 · Liner Notes · <a href="https://linernotes.aves.ltd/en/blog/background-neural-engine/">English</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>iPhone で録音した会話を、アプリが画面の裏にいる間(バックグラウンド)に処理しようとしたら、フォアグラウンドなら33秒の処理が5分たっても終わらず、やがて記録も残さずに消えました。原因を探していくと、問題は3つ重なっていました。中でも大きかったのは、バックグラウンドで遅くなるのは CPU で動く処理だけで、Neural Engine で動く推論はほとんど遅くならないことです。同じ処理が、CPU では12〜21倍遅くなり、Neural Engine では2倍以内でした。バックグラウンドで音声を処理するなら、できるだけ Neural Engine に載せるのが安全です。どう調べて、何を直したかを書きます。</p>
+<h2>やりたかったこと</h2>
+<p>iPhone の中で会話を文字にする日記アプリ(Liner Notes)を作っています。録音を止めたあと、話者の分離、文字起こし、要約をまとめて行う「取り込み」の処理があります。44分の録音で、フォアグラウンドなら4分ほどかかります。利用者は録音を止めたらすぐ別のアプリに移るので、この処理をバックグラウンドで最後まで終わらせたいと考えました。</p>
+<h2>iOS のバックグラウンド処理の種類</h2>
+<p>iOS では、アプリがバックグラウンドで動ける時間が仕組みごとに決まっています。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>仕組み</th><th>動ける時間</th><th>向いている用途</th></tr></thead>
+<tbody>
+<tr><th>beginBackgroundTask</th><td>約30秒</td><td>画面を離れる直前の仕事を終わらせる</td></tr>
+<tr><th>BGProcessingTask</th><td>実行の時刻はシステムが決める</td><td>急がない処理(充電中の夜など)</td></tr>
+<tr><th>BGContinuedProcessingTask(iOS 26〜)</th><td>進捗を報告し続ける間</td><td>利用者が始めた長い処理。進捗が画面に表示される</td></tr>
+<tr><th>オーディオのバックグラウンドモード</th><td>録音や再生をしている間</td><td>録音アプリ、音楽アプリ</td></tr>
+</tbody></table></div>
+<p>取り込みは利用者が録音を止めたことで始まる長い処理なので、BGContinuedProcessingTask を使いました。</p>
+<h2>起きたこと: 遅いうえに、記録を残さず消える</h2>
+<p>フォアグラウンドなら33秒で終わる「声を分ける」段階が、バックグラウンドでは5分たっても終わりませんでした。そのうち処理ごと消えます。クラッシュログも、期限切れの通知も、メモリ不足の記録も残りません。</p>
+<p>ログを数えると、継続処理の申請62回のうち18回は10分たっても始まらず、始まった回も40〜627秒で消えていました。Apple の開発者フォーラムにも「バックグラウンドで4〜5倍遅い」という投稿があり、原因は分かっていませんでした。</p>
+<h2>最初に試したこと: CPU を休ませる、進捗を細かく報告する</h2>
+<p>まず「CPU を使いすぎて止められている」と考え、処理の合間に待ちを入れて CPU を休ませました。処理が遅くなるだけで、消える回数は変わりませんでした。</p>
+<p>次に、フォーラムに「進捗の報告が約30秒止まると打ち切られる」とあったので、メインスレッドの外から5秒ごとに進捗を進めるハートビートを入れました。それでも開始25秒で消えました。ハートビートの記録を見ると、進捗は止まっていません。原因は別にありました。</p>
+<h2>原因1: 自分のコードが猶予の期限を無視していた</h2>
+<p>取り込みの入口で <code>beginBackgroundTask(expirationHandler: nil)</code> を呼んでいました。この書き方だと、画面を離れて約30秒で猶予が切れても、アプリは自分で処理を終えません。iOS はそのアプリを記録なしに終了させます。「継続処理が始まらない」ように見えていた18回も、実はこれで30〜55秒後に消えていました。</p>
+<p>猶予が切れたら自分で終える形に直すと、黙って消えることはなくなりました。29分の会話が、バックグラウンドだけで2分15秒で保存まで終わるようになります。ただし、遅さは残りました。</p>
+<h2>原因2: CPU の処理だけが、遅いコアで動いていた</h2>
+<p>何が遅いのかを切り分けるため、計測用のアプリを作りました。同じ Core ML の処理(日本語10分の音声の文字起こし)を、計算ユニットと、アプリの状態を変えて測ります。iPhone 16、iOS 27、2回の中央値です。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>計算ユニット</th><th>フォアグラウンド</th><th>バックグラウンド(継続処理)</th><th>バックグラウンド(録音中)</th></tr></thead>
+<tbody>
+<tr><th>Neural Engine</th><td>2.2秒</td><td>4.3秒(2倍)</td><td>2.4秒</td></tr>
+<tr><th>CPU のみ</th><td>8.4秒</td><td>102〜174秒(12〜21倍)</td><td>7.3秒</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="日本語10分の文字起こしにかかった時間">
+<p class="vt">日本語10分の文字起こしにかかった時間</p>
+<p class="vu">秒(短いほど速い)。CPU のみのバックグラウンドは102〜174秒の中央で描いている</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Neural Engine</span><span><i style="background:var(--s2)"></i>CPU のみ</span></div>
+<div class="vgroup"><div class="vlabel">フォアグラウンド</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:1.53%;background:var(--s1)" title="フォアグラウンド / Neural Engine: 2.2秒"></span></div><span class="vval">2.2秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:5.85%;background:var(--s2)" title="フォアグラウンド / CPU のみ: 8.4秒"></span></div><span class="vval">8.4秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">バックグラウンド(継続処理)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:3.00%;background:var(--s1)" title="バックグラウンド(継続処理) / Neural Engine: 4.3秒"></span></div><span class="vval">4.3秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s2)" title="バックグラウンド(継続処理) / CPU のみ: 102〜174秒"></span></div><span class="vval">102〜174秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">バックグラウンド(録音中)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:1.67%;background:var(--s1)" title="バックグラウンド(録音中) / Neural Engine: 2.4秒"></span></div><span class="vval">2.4秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:5.09%;background:var(--s2)" title="バックグラウンド(録音中) / CPU のみ: 7.3秒"></span></div><span class="vval">7.3秒</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th></th><th>Neural Engine</th><th>CPU のみ</th></tr></thead><tbody><tr><td>フォアグラウンド</td><td>2.2秒</td><td>8.4秒</td></tr><tr><td>バックグラウンド(継続処理)</td><td>4.3秒</td><td>102〜174秒</td></tr><tr><td>バックグラウンド(録音中)</td><td>2.4秒</td><td>7.3秒</td></tr></tbody></table></details>
+</figure>
+<p>Neural Engine で動く推論は2倍以内に収まり、CPU で動く処理だけが12〜21倍遅くなっています。録音中(マイクを開いている間)は、バックグラウンドでもどちらもフォアグラウンドと同じ速さでした。</p>
+<p>CPU が遅い理由を見るため、プロセスが使った CPU 時間と消費電力量を task_info で読みました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>CPU のみの処理</th><th>経過時間</th><th>使った CPU 時間</th><th>消費電力量(フォアグラウンドを1とする)</th></tr></thead>
+<tbody>
+<tr><th>フォアグラウンド</th><td>8.7秒</td><td>7.9秒</td><td>1</td></tr>
+<tr><th>バックグラウンド</th><td>112秒</td><td>86秒</td><td>0.22</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="CPU のみの処理の、経過時間と使った CPU 時間">
+<p class="vt">CPU のみの処理の、経過時間と使った CPU 時間</p>
+<p class="vu">秒。バックグラウンドでも CPU 時間はほぼ経過時間ぶん割り当てられている</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>経過時間</span><span><i style="background:var(--s2)"></i>CPU 時間</span></div>
+<div class="vgroup"><div class="vlabel">フォアグラウンド</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:7.47%;background:var(--s1)" title="フォアグラウンド / 経過時間: 8.7秒"></span></div><span class="vval">8.7秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:6.78%;background:var(--s2)" title="フォアグラウンド / CPU 時間: 7.9秒"></span></div><span class="vval">7.9秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">バックグラウンド</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="バックグラウンド / 経過時間: 112秒"></span></div><span class="vval">112秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:73.83%;background:var(--s2)" title="バックグラウンド / CPU 時間: 86秒"></span></div><span class="vval">86秒</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th></th><th>経過時間</th><th>CPU 時間</th></tr></thead><tbody><tr><td>フォアグラウンド</td><td>8.7秒</td><td>7.9秒</td></tr><tr><td>バックグラウンド</td><td>112秒</td><td>86秒</td></tr></tbody></table></details>
+</figure>
+<p>バックグラウンドでも、CPU 時間は経過時間のほとんどで割り当てられています。それなのに、同じ処理を終えるのに11倍の CPU 時間がかかり、電力は4.6分の1しか使っていません。CPU の割り当てを絞られて待たされているのではなく、省電力の遅いコアで、低いクロックで動いていると考えると、数字がすべて合います。Instruments でコアの配置を直接見てはいないので、これは推定です。</p>
+<p>音声は最長20秒の区切りに分けて処理しているので、区切り1つあたりの時間も見ました。バックグラウンドでは最初の区切りから遅く、途中でさらに遅い区間に切り替わることもありました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>区切り1つあたりの時間</th><th>CPU のみ</th></tr></thead>
+<tbody>
+<tr><th>フォアグラウンド</th><td>0.14秒</td></tr>
+<tr><th>バックグラウンド(最初の区切りから)</th><td>1.7秒</td></tr>
+<tr><th>バックグラウンド(遅い区間)</th><td>8秒前後</td></tr>
+</tbody></table></div>
+<p>Apple のフォーラムには「フォアグラウンドでも、負荷が30秒続くとスレッドが効率コアに移される」という別の報告があります。今回は最初の区切りから遅いので、その現象とは違うものです。</p>
+<p>もう一つ分かったのは、Core ML を呼ぶタスクの優先度を <code>.background</code> にすると、フォアグラウンドでも Neural Engine の推論が3.6倍遅くなることです。CPU の処理は優先度では変わりませんでした。</p>
+<figure class="viz" role="group" aria-label="タスクの優先度を変えたときの処理時間(フォアグラウンド)">
+<p class="vt">タスクの優先度を変えたときの処理時間(フォアグラウンド)</p>
+<p class="vu">秒</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Neural Engine</span><span><i style="background:var(--s2)"></i>CPU のみ</span></div>
+<div class="vgroup"><div class="vlabel">userInitiated</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:25.16%;background:var(--s1)" title="userInitiated / Neural Engine: 2.2秒"></span></div><span class="vval">2.2秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s2)" title="userInitiated / CPU のみ: 8.4秒"></span></div><span class="vval">8.4秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">utility</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:32.63%;background:var(--s1)" title="utility / Neural Engine: 2.8秒"></span></div><span class="vval">2.8秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:86.96%;background:var(--s2)" title="utility / CPU のみ: 7.6秒"></span></div><span class="vval">7.6秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">background</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.30%;background:var(--s1)" title="background / Neural Engine: 7.9秒"></span></div><span class="vval">7.9秒</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:95.46%;background:var(--s2)" title="background / CPU のみ: 8.3秒"></span></div><span class="vval">8.3秒</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th></th><th>Neural Engine</th><th>CPU のみ</th></tr></thead><tbody><tr><td>userInitiated</td><td>2.2秒</td><td>8.4秒</td></tr><tr><td>utility</td><td>2.8秒</td><td>7.6秒</td></tr><tr><td>background</td><td>7.9秒</td><td>8.3秒</td></tr></tbody></table></details>
+</figure>
+<p>消えていた「声を分ける」段階には、音声の変換や区間の切り出しなど CPU で動く処理が含まれていて、そこが遅くなっていたと考えています。</p>
+<h2>原因3: 継続処理が始まらない回がある</h2>
+<p>1と2を直したあとも、継続処理を申請して9分以上起動しない回を再現しました。これは iOS 側の挙動で、アプリからは直せません。</p>
+<h2>直したこと: 重い処理を録音中に終わらせる</h2>
+<p>録音中はバックグラウンドでもフォアグラウンドと同じ速さで動くので、取り込みの重い処理を録音中に移しました。録音を止めたあとは、その結果を使うだけにしています。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>処理</th><th>以前(録音を止めたあと)</th><th>今(録音中)</th></tr></thead>
+<tbody>
+<tr><th>文字起こし</th><td>録音全体をまとめて処理</td><td>12秒ごとに録音中に処理</td></tr>
+<tr><th>声の分離</th><td>録音を流し直す(バックグラウンドで5分以上)</td><td>録音中に済ませる。止めたあとは0.3秒</td></tr>
+<tr><th>笑い声の検出</th><td>29分の録音で167秒</td><td>録音中に済ませる。止めたあとは0秒</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="録音を止めたあとの処理時間(笑い声の検出、29分の録音、バックグラウンド)">
+<p class="vt">録音を止めたあとの処理時間(笑い声の検出、29分の録音、バックグラウンド)</p>
+<p class="vu">秒</p>
+<div class="vgroup"><div class="vlabel">以前(録音後に検出)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="以前(録音後に検出): 167秒"></span></div><span class="vval">167秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">今(録音中の結果を使う)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:0.00%;background:var(--s1)" title="今(録音中の結果を使う): 0秒"></span></div><span class="vval">0秒</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th>項目</th><th>値</th></tr></thead><tbody><tr><td>以前(録音後に検出)</td><td>167秒</td></tr><tr><td>今(録音中の結果を使う)</td><td>0秒</td></tr></tbody></table></details>
+</figure>
+<p>録音中に済ませられない処理は、Core ML の計算ユニットを <code>.cpuAndNeuralEngine</code> にして、Neural Engine に載せています。バックグラウンドでは GPU が使えないので、<code>.all</code> にしていても意味がありません。</p>
+<p>継続処理が始まらない回に備えて、文字起こしは録音を止めた時点で保存し、要約は次にアプリを開いたときに付け直します。</p>
+<p>録音を止めたあとに残っている重い処理は、話し手の分け直しだけです。10分の録音で、バックグラウンドで28秒でした。内訳は、区切りと埋め込みの計算が8秒、CPU のクラスタリングが0.5秒、残りはモデルの読み込みです。</p>
+<h2>まとめ</h2>
+<ul><li>バックグラウンドで音声を処理するなら、できるだけ Neural Engine に載せる。同じ処理が Neural Engine なら2倍以内、CPU なら12〜21倍遅かった</li><li>バックグラウンドで遅いときは、モデルより先に、CPU で動く前処理や後処理を疑う</li><li><code>beginBackgroundTask</code> は猶予が切れたら自分で終える。期限を無視すると、iOS が記録を残さずにアプリを終了させる</li><li>Core ML を <code>.background</code> 優先度のタスクから呼ばない。フォアグラウンドでも3.6倍遅くなる</li><li>録音アプリなら、重い処理は録音中に済ませる。マイクを開いている間は、バックグラウンドでもフォアグラウンドと同じ速さで動く</li><li>継続処理は始まらないことがある。途中の結果を先に保存しておく</li></ul>
+<p>計測に使ったアプリとデータは GitHub で公開しています(<a href="https://github.com/yamannyama/granite-speech-coreml" style="color:var(--copper-l);text-decoration:underline;text-underline-offset:3px">yamannyama/granite-speech-coreml</a>)。</p>
+<aside class="promo"><img src="../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>この記事は、iPhone の日記アプリ Liner Notes を作る中で測った結果です。Liner Notes は、一日の会話を iPhone の中で文字にして、夜に日記の下書きを置いてくれます。日記と自動の記録は無料で使えます。</p><a class="promo-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store で入手</a></div></aside>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../../">Liner Notes</a>
+    <a href="../../blog/">開発ノート</a>
+    <a href="../../support.html">サポート</a>
+    <a href="../../privacy.html">プライバシーポリシー</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">運営会社</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>

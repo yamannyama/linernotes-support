@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自分のコピー AI は、何を学ばせても一致率62〜67%で止まった｜Liner Notes</title>
+<meta name="description" content="先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/blog/digital-twin/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/digital-twin/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/digital-twin/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="自分のコピー AI は、何を学ばせても一致率62〜67%で止まった">
+<meta property="og:description" content="先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://linernotes.aves.ltd/blog/digital-twin/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="自分のコピー AI は、何を学ばせても一致率62〜67%で止まった">
+<meta name="twitter:description" content="先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"自分のコピー AI は、何を学ばせても一致率62〜67%で止まった","description":"先行研究の方法で自分のコピー AI を作ったが、日記2万字でも自己紹介1行でも一致率は62〜67%。その人らしさは内容より話し方に出ることを、自分の録音と文献で。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/digital-twin/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../"><img src="../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../../blog/">Engineering notes</a></p>
+    <h1>先行研究の方法で自分のコピー AI を作ったが、何を学ばせても一致率は62〜67%で止まった</h1>
+    <p class="meta">2026 年 11 月 6 日 · Liner Notes · <a href="https://linernotes.aves.ltd/en/blog/digital-twin/">English</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>先行研究にならって、言語モデルに自分の代わりをさせ、自分と同じ選択をするかを測りました。日記74日分(約2万字)、自己紹介の1行、面接の書き起こしなど、何を材料にしても、Apple の PCC での一致率は0.62〜0.67(62〜67%)に収まりました。日記を2万字読ませても自己紹介の1行と変わらず、材料を足すとむしろ下がることもありました。一方で、話し方は話す相手によってはっきり変わっていました。何を測って、アプリの設計をどう変えたかを書きます。</p>
+<h2>やりたかったこと</h2>
+<p>iPhone の日記アプリ(Liner Notes)を作っています。このアプリでは将来、「自分がどんな人だったかを家族に残す」ことを考えています。日記と会話の記録がたまれば、自分の代わりに答える AI(いわゆるデジタルツイン)をどこまで作れるのか、2026年10月に自分1人で測りました。方法は先行研究にならいました。Park ほか(2024)は、約1,000人に2時間の面接をして、その書き起こしから本人のアンケートの答えを言語モデルに予測させています。同じように、自分の材料を言語モデルに渡し、自分の答えを予測させました。</p>
+<h2>どう測ったか</h2>
+<p>自分の考え方や好みを問う74問を用意しました。性格、判断の仕方、時間やお金のリスクの取り方、日常の選択、社会的な態度の5つに分かれ、選択肢や5段階で答える形式です。まず自分で答え、次に言語モデルに材料を渡して「この人ならどう答えるか」を答えさせ、自分の答えとどれだけ近いかを測りました。</p>
+<p>一致率は、1から「答えの差 ÷ 尺度の幅」を引いた値の平均です。1なら完全に一致です。でたらめに答えた場合は0.55になります。</p>
+<p>モデルは、Mac で動かした Qwen2.5 の7B と14B(4bit)と、Apple の Private Cloud Compute(PCC)の3つです。</p>
+<h2>結果: 材料を変えても、一致率はほとんど変わらなかった</h2>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>渡した材料</th><th>PCC</th><th>14B</th></tr></thead>
+<tbody>
+<tr><th>でたらめに答えた場合</th><td>0.55</td><td>0.55</td></tr>
+<tr><th>材料なし</th><td>0.53</td><td>(答えず)</td></tr>
+<tr><th>自己紹介の1行(年齢や家族構成などの基本情報)</th><td>0.67</td><td>0.72</td></tr>
+<tr><th>日記74日分(約2万字)と記録</th><td>0.66</td><td>0.68</td></tr>
+<tr><th>面接12問の書き起こし(約5,700字)</th><td>0.66</td><td>0.61</td></tr>
+<tr><th>自己紹介の1行と、考え方を聞いた31問の答え</th><td>0.64</td><td>0.61</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="渡した材料ごとの一致率">
+<p class="vt">渡した材料ごとの一致率</p>
+<p class="vu">1が完全一致</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>PCC</span><span><i style="background:var(--s2)"></i>14B</span></div>
+<div class="vgroup"><div class="vlabel">自己紹介の1行</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:83.75%;background:var(--s1)" title="自己紹介の1行 / PCC: 0.67"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.67</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.00%;background:var(--s2)" title="自己紹介の1行 / 14B: 0.72"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.72</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">日記74日分(約2万字)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:82.50%;background:var(--s1)" title="日記74日分(約2万字) / PCC: 0.66"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.66</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:85.00%;background:var(--s2)" title="日記74日分(約2万字) / 14B: 0.68"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.68</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">面接12問(約5,700字)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:82.50%;background:var(--s1)" title="面接12問(約5,700字) / PCC: 0.66"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.66</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:76.25%;background:var(--s2)" title="面接12問(約5,700字) / 14B: 0.61"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.61</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">1行と31問の答え</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:80.00%;background:var(--s1)" title="1行と31問の答え / PCC: 0.64"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.64</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:76.25%;background:var(--s2)" title="1行と31問の答え / 14B: 0.61"></span><span class="vref" style="left:68.75%"></span></div><span class="vval">0.61</span></div>
+</div></div>
+<p class="vnote">点線: でたらめに答えた場合(0.55)</p>
+<details><summary>表で見る</summary><table><thead><tr><th></th><th>PCC</th><th>14B</th></tr></thead><tbody><tr><td>自己紹介の1行</td><td>0.67</td><td>0.72</td></tr><tr><td>日記74日分(約2万字)</td><td>0.66</td><td>0.68</td></tr><tr><td>面接12問(約5,700字)</td><td>0.66</td><td>0.61</td></tr><tr><td>1行と31問の答え</td><td>0.64</td><td>0.61</td></tr></tbody></table></details>
+</figure>
+<p>日記を2万字読ませても、自己紹介1行と変わりませんでした。自分の考え方を直接答えた31問を足すと、むしろ下がっています。74問で測った1人分の結果なので、±0.05ほどは誤差と見ています。</p>
+<p>下がった理由を調べると、自分の答えが聞き方によって食い違っていました。31問では「十分なら決める」「保留は苦にならない」と自由に書いたのに、74問の5段階では「迷うのは苦痛」に「ややあてはまる」と答えていました。モデルは私の言葉に従って答え、外れていました。</p>
+<p>材料に関係なく、モデルの偏りが強く出る問いもありました。時間やお金のリスクを問う9問では、PCC はどの材料を渡しても「安全で、今すぐ」の側を選び、9問とも私と逆でした。問いの種類ごとに見ると、日記が効いたのは判断の仕方だけで、時間とリスクの問いはどちらの材料でも動きません。</p>
+<figure class="viz" role="group" aria-label="問いの種類ごとの一致率(PCC)">
+<p class="vt">問いの種類ごとの一致率(PCC)</p>
+<p class="vu">1が完全一致</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>自己紹介の1行</span><span><i style="background:var(--s2)"></i>日記74日分</span></div>
+<div class="vgroup"><div class="vlabel">性格</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:65.00%;background:var(--s1)" title="性格 / 自己紹介の1行: 0.65"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.65</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:69.00%;background:var(--s2)" title="性格 / 日記74日分: 0.69"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.69</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">判断の仕方</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:80.00%;background:var(--s1)" title="判断の仕方 / 自己紹介の1行: 0.8"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.8</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:88.00%;background:var(--s2)" title="判断の仕方 / 日記74日分: 0.88"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.88</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">時間とリスク</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:33.00%;background:var(--s1)" title="時間とリスク / 自己紹介の1行: 0.33"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.33</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:33.00%;background:var(--s2)" title="時間とリスク / 日記74日分: 0.33"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.33</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">日常の選択</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:87.00%;background:var(--s1)" title="日常の選択 / 自己紹介の1行: 0.87"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.87</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:73.00%;background:var(--s2)" title="日常の選択 / 日記74日分: 0.73"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.73</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">社会的な態度</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:57.00%;background:var(--s1)" title="社会的な態度 / 自己紹介の1行: 0.57"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.57</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:55.00%;background:var(--s2)" title="社会的な態度 / 日記74日分: 0.55"></span><span class="vref" style="left:55.00%"></span></div><span class="vval">0.55</span></div>
+</div></div>
+<p class="vnote">点線: でたらめに答えた場合(0.55)</p>
+<details><summary>表で見る</summary><table><thead><tr><th></th><th>自己紹介の1行</th><th>日記74日分</th></tr></thead><tbody><tr><td>性格</td><td>0.65</td><td>0.69</td></tr><tr><td>判断の仕方</td><td>0.8</td><td>0.88</td></tr><tr><td>時間とリスク</td><td>0.33</td><td>0.33</td></tr><tr><td>日常の選択</td><td>0.87</td><td>0.73</td></tr><tr><td>社会的な態度</td><td>0.57</td><td>0.55</td></tr></tbody></table></details>
+</figure>
+<h2>内容ではなく、話し方は相手で変わっていた</h2>
+<p>何を話すかを材料にしても精度が上がらないなら、その人らしさは別の所にありそうです。そこで、自分の会話の録音から、話し方の数字を相手ごとに出してみました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>相手</th><th>発話の間(ま)</th><th>一文の長さ</th></tr></thead>
+<tbody>
+<tr><th>同僚</th><td>1.6秒</td><td>32字</td></tr>
+<tr><th>妻</th><td>2.2秒</td><td>20字</td></tr>
+<tr><th>娘</th><td>2.8秒</td><td>20字</td></tr>
+<tr><th>上司</th><td>5.3秒</td><td>(未集計)</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="相手ごとの発話の間(ま)">
+<p class="vt">相手ごとの発話の間(ま)</p>
+<p class="vu">秒</p>
+<div class="vgroup"><div class="vlabel">同僚</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:29.03%;background:var(--s1)" title="同僚: 1.6秒"></span></div><span class="vval">1.6秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">妻</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:39.91%;background:var(--s1)" title="妻: 2.2秒"></span></div><span class="vval">2.2秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">娘</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:50.80%;background:var(--s1)" title="娘: 2.8秒"></span></div><span class="vval">2.8秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">上司</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="上司: 5.3秒"></span></div><span class="vval">5.3秒</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th>項目</th><th>値</th></tr></thead><tbody><tr><td>同僚</td><td>1.6秒</td></tr><tr><td>妻</td><td>2.2秒</td></tr><tr><td>娘</td><td>2.8秒</td></tr><tr><td>上司</td><td>5.3秒</td></tr></tbody></table></details>
+</figure>
+<p>話す速さは、相手に関係なく1秒あたり4.7〜5.0字で同じでした。変わるのは、相手との間の取り方と、一文の長さです。録音42本のうち26本は話した相手が記録されていなかったので、残りの16本からの数字です。</p>
+<h2>研究でも同じ向きの結果が出ていた</h2>
+<p>話し方が人を見分ける手がかりになることは、先行研究でも示されていました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>研究</th><th>分かったこと</th></tr></thead>
+<tbody>
+<tr><th>Helander ほか(2007)</th><td>声を正弦波に置き換え、言葉が聞き取れない音にしても、知り合いを当てられる(2択で70.4%)</td></tr>
+<tr><th>Kanber ほか(2021)</th><td>恋人の声は、「えー」「あー」のような言葉でない音からでも91.3%で当てられる</td></tr>
+<tr><th>IMPersona(2025)</th><td>文章で本人のふりをする AI に、家族でもだまされる。本人が書いた文でも、本人と判定されるのは70.5%</td></tr>
+<tr><th>遺族16人の聞き取り(2026)</th><td>亡くなった人を模したチャットを「その人らしい」と感じるかは、内容の正しさより口調や言葉選びで決まる</td></tr>
+<tr><th>Park ほか(2024)</th><td>アンケートの答えを当てるだけなら、話し方の特徴を除いた要約でも、面接の書き起こしと精度がほぼ同じ(0.81と0.83)</td></tr>
+</tbody></table></div>
+<p>最後の研究は、内容で測ると話し方の差が出ないことを示していて、私の結果と同じ向きです。その人らしさは「何を言うか」より「どう言うか」に出ます。</p>
+<h2>アプリの設計を変えた</h2>
+<p>この結果から、会話の保存の仕方を変えました。以前は、文字起こしを整えた文章だけを残していました。今は次のものを、自分が話した区間だけ残します。</p>
+<ul><li>話したままの言葉(整える前の文字起こし)</li><li>声の数字(高さ、速さ、間、笑い)</li><li>誰と話していたか</li></ul>
+<p>相手の声は残さず、音声そのものは24時間で消します。自分のコピーを評価するときも、選択の一致率ではなく、自分を知る人が文体や口調で「本人らしい」と感じるかで見ることにしました。</p>
+<h2>まとめ</h2>
+<ul><li>自分の代わりをする AI は、日記を2万字読ませても自己紹介1行と同じ精度だった。材料を増やす前に、どこで頭打ちになるかを測る</li><li>自分の答えは聞き方で変わる。答えを材料に足すと、精度が下がることがある</li><li>その人らしさは話し方に出る。発話の間と一文の長さは、相手によって変わる</li><li>本人らしさを残したいなら、整えた文章だけでなく、話したままの言葉と声の数字を残す</li></ul>
+<aside class="promo"><img src="../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>この記事は、iPhone の日記アプリ Liner Notes を作る中で測った結果です。Liner Notes は、一日の会話を iPhone の中で文字にして、夜に日記の下書きを置いてくれます。日記と自動の記録は無料で使えます。</p><a class="promo-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store で入手</a></div></aside>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../../">Liner Notes</a>
+    <a href="../../blog/">開発ノート</a>
+    <a href="../../support.html">サポート</a>
+    <a href="../../privacy.html">プライバシーポリシー</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">運営会社</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>

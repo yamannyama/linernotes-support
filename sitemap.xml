@@ -26,6 +26,102 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://linernotes.aves.ltd/blog/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/en/blog/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/blog/background-neural-engine/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/background-neural-engine/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/en/blog/background-neural-engine/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/background-neural-engine/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/background-neural-engine/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/blog/asr-benchmark/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/asr-benchmark/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/asr-benchmark/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/en/blog/asr-benchmark/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/asr-benchmark/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/asr-benchmark/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/blog/transcription-vs-summary/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/transcription-vs-summary/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/transcription-vs-summary/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/en/blog/transcription-vs-summary/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/transcription-vs-summary/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/transcription-vs-summary/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/blog/pcc-refusals/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/pcc-refusals/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/en/blog/pcc-refusals/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/pcc-refusals/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/blog/digital-twin/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/digital-twin/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/digital-twin/"/>
+  </url>
+  <url>
+    <loc>https://linernotes.aves.ltd/en/blog/digital-twin/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/digital-twin/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/digital-twin/"/>
+  </url>
+  <url>
     <loc>https://linernotes.aves.ltd/blog/on-device-diary/</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>monthly</changefreq>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choosing a speech recognizer by benchmark alone is risky｜Liner Notes</title>
+<meta name="description" content="On read speech Apple&#x27;s recognizer looked best; on conversation its error rate was 1.8x Parakeet&#x27;s. How to compare Japanese speech recognizers, with data.">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/en/blog/asr-benchmark/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/asr-benchmark/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/asr-benchmark/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="Choosing a speech recognizer by benchmark alone is risky">
+<meta property="og:description" content="On read speech Apple&#x27;s recognizer looked best; on conversation its error rate was 1.8x Parakeet&#x27;s. How to compare Japanese speech recognizers, with data.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://linernotes.aves.ltd/en/blog/asr-benchmark/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Choosing a speech recognizer by benchmark alone is risky">
+<meta name="twitter:description" content="On read speech Apple&#x27;s recognizer looked best; on conversation its error rate was 1.8x Parakeet&#x27;s. How to compare Japanese speech recognizers, with data.">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Choosing a speech recognizer by benchmark alone is risky","description":"On read speech Apple&#x27;s recognizer looked best; on conversation its error rate was 1.8x Parakeet&#x27;s. How to compare Japanese speech recognizers, with data.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/en/blog/asr-benchmark/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../../en/"><img src="../../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/us/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../../../en/blog/">Engineering notes</a></p>
+    <h1>Choosing a speech recognizer by benchmark alone is risky. Measure with the audio your app actually handles</h1>
+    <p class="meta">November 6, 2026 · Liner Notes · <a href="https://linernotes.aves.ltd/blog/asr-benchmark/">日本語版</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>When I re-evaluated the speech recognizer for my iPhone diary app, Apple's recognizer looked best on the commonly used read-speech benchmark. When I re-measured on conversational audio, which is what the app actually handles, Apple's character error rate was about 1.8× that of Parakeet, the model I was already using. Had I switched based on the benchmark, transcription quality would have dropped. Here is how I compared them, where I almost went wrong, and what I chose, with the numbers.</p>
+<h2>What I wanted to do</h2>
+<p>I build Liner Notes, an iPhone diary app that turns conversations into text on the device. For transcription I was using NVIDIA's Parakeet Japanese model through FluidAudio on Core ML.</p>
+<p>In October 2026, Apple's recognizer (iOS SpeechTranscriber), Mistral's Voxtral and IBM's Granite Speech all became usable for Japanese, so I compared them to see whether switching was worth it. The requirements: it runs on the iPhone, it is fast enough to process in the background after recording, and it transcribes conversation accurately.</p>
+<h2>How Japanese speech recognition is evaluated</h2>
+<p>Japanese has no spaces between words, so instead of word error rate (WER) the usual measure is character error rate (CER). You align the reference and the output character by character and divide substitutions, deletions and insertions by the number of reference characters. I normalized both with NFKC and removed punctuation, spaces and symbols before comparing. Notation differences such as 三十分 vs 30分 still count as errors.</p>
+<p>Public Japanese evaluation sets fall roughly into read speech and spontaneous or conversational speech.</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Dataset</th><th>Type</th><th>Contents</th></tr></thead>
+<tbody>
+<tr><th>FLEURS (Google)</th><td>Read</td><td>The same sentences read in many languages. Often used for published model results</td></tr>
+<tr><th>Common Voice (Mozilla)</th><td>Read</td><td>Sentences read by volunteers</td></tr>
+<tr><th>JSUT</th><td>Read</td><td>Sentences read by a single speaker</td></tr>
+<tr><th>CSJ (Corpus of Spontaneous Japanese)</th><td>Spontaneous</td><td>Lectures and similar talks. Paid</td></tr>
+<tr><th>ReazonSpeech</th><td>Conversation</td><td>TV broadcast audio (drama, variety, news) with captions</td></tr>
+</tbody></table></div>
+<h2>Read speech first, and I was ready to switch to Apple</h2>
+<p>I started with FLEURS Japanese (dev set, 266 clips, 56.5 minutes). Voxtral's published results use the same data, so it seemed easy to compare.</p>
+<p>All models ran on the same Mac (Apple silicon, 24 GB).</p>
+<ul><li>Parakeet: FluidAudio 0.17.4. As in the app, segments are cut at quiet points every 6–12 seconds and padded with 0.5 s of silence on each side</li><li>Apple: SpeechTranscriber (ja-JP)</li><li>Voxtral: 6-bit quantized Voxtral Mini 4B Realtime on the Mac GPU, at two latencies: 480 ms (default) and 2400 ms (most accurate)</li></ul>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Model</th><th>CER</th><th>Time for 56.5 min</th></tr></thead>
+<tbody>
+<tr><th>Voxtral (2400 ms)</th><td>3.61%</td><td>2,067 s</td></tr>
+<tr><th>Apple</th><td>4.68%</td><td>About 69 s</td></tr>
+<tr><th>Parakeet (in use)</th><td>5.29%</td><td>18.8 s</td></tr>
+<tr><th>Voxtral (480 ms)</th><td>7.02%</td><td>3,003 s</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="CER on read speech (FLEURS Japanese)">
+<p class="vt">CER on read speech (FLEURS Japanese)</p>
+<p class="vu">% (lower is more accurate)</p>
+<div class="vgroup"><div class="vlabel">Voxtral (2400 ms)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:49.45%;background:var(--s1)" title="Voxtral (2400 ms): 3.61%"></span></div><span class="vval">3.61%</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Apple</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:64.10%;background:var(--s1)" title="Apple: 4.68%"></span></div><span class="vval">4.68%</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Parakeet</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:72.46%;background:var(--s1)" title="Parakeet: 5.29%"></span></div><span class="vval">5.29%</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Voxtral (480 ms)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="Voxtral (480 ms): 7.02%"></span></div><span class="vval">7.02%</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>Voxtral (2400 ms)</td><td>3.61%</td></tr><tr><td>Apple</td><td>4.68%</td></tr><tr><td>Parakeet</td><td>5.29%</td></tr><tr><td>Voxtral (480 ms)</td><td>7.02%</td></tr></tbody></table></details>
+</figure>
+<p>Voxtral at 2400 ms was the most accurate, but about 110× slower than Parakeet and 3.6 GB even at 6 bits, so running it in the background on an iPhone is not realistic. Apple made fewer errors than Parakeet, and since it is built into the OS, the app would not need to ship a model. At this point I was planning to switch to Apple.</p>
+<h2>Measured on conversation, Apple's error rate was about 1.8×</h2>
+<p>FLEURS, though, is clear reading in a quiet room. What the app actually handles is conversation, with hesitations, backchannels and overlapping speech. So I measured again under the same conditions on the ReazonSpeech test set, which is TV broadcast conversation (2,632 clips, 258 minutes).</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Model</th><th>CER</th><th>Clips with no output</th><th>Time for 258 min</th></tr></thead>
+<tbody>
+<tr><th>Parakeet</th><td>12.74%</td><td>0</td><td>118 s</td></tr>
+<tr><th>Apple</th><td>22.96%</td><td>37</td><td>631 s</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="Apple and Parakeet swap places between read speech and conversation">
+<p class="vt">Apple and Parakeet swap places between read speech and conversation</p>
+<p class="vu">CER (%, lower is more accurate)</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Parakeet</span><span><i style="background:var(--s2)"></i>Apple</span></div>
+<div class="vgroup"><div class="vlabel">Read (FLEURS)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:22.15%;background:var(--s1)" title="Read (FLEURS) / Parakeet: 5.29%"></span></div><span class="vval">5.29%</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:19.60%;background:var(--s2)" title="Read (FLEURS) / Apple: 4.68%"></span></div><span class="vval">4.68%</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Conversation (ReazonSpeech)</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:53.35%;background:var(--s1)" title="Conversation (ReazonSpeech) / Parakeet: 12.74%"></span></div><span class="vval">12.74%</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s2)" title="Conversation (ReazonSpeech) / Apple: 22.96%"></span></div><span class="vval">22.96%</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th></th><th>Parakeet</th><th>Apple</th></tr></thead><tbody><tr><td>Read (FLEURS)</td><td>5.29%</td><td>4.68%</td></tr><tr><td>Conversation (ReazonSpeech)</td><td>12.74%</td><td>22.96%</td></tr></tbody></table></details>
+</figure>
+<p>The ranking flipped. Looking at Apple's errors, it returned nothing for 37 short clips and sometimes added polite phrases nobody said, such as "thank you very much" and "nice to meet you." It is the same kind of error that a beta tester had reported: a "hello" that nobody said showing up in the transcript. A greeting nobody said, left in someone's diary, is a real problem.</p>
+<p>Apple's time includes starting up for each clip, so the speed gap is smaller than the table suggests. But for conversation accuracy, Parakeet was the one to choose.</p>
+<h2>Adding Granite: 0.5 s of silence moved the number by 3 points</h2>
+<p>Next I added IBM's Granite Speech 5.0 TurboCTC (470M parameters), which gained Japanese support on October 21. The first result on conversation was Granite 9.79% vs Parakeet 12.74%. Now it looked like I should switch to Granite.</p>
+<p>But Parakeet's clips were padded with 0.5 s of silence on each side, as in the app, and Granite's were not. Here are the results with matched conditions (Granite converted to Core ML for the iPhone).</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Condition</th><th>Granite</th><th>Parakeet</th></tr></thead>
+<tbody>
+<tr><th>Conversation (ReazonSpeech), no padding</th><td>9.99%</td><td>11.73%</td></tr>
+<tr><th>Conversation (ReazonSpeech), 0.5 s padding</th><td>13.03%</td><td>12.74%</td></tr>
+<tr><th>Continuous audio (about 4 min × 14), 0.5 s padding</th><td>4.36%</td><td>4.39%</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="Padding changes the gap between Granite and Parakeet">
+<p class="vt">Padding changes the gap between Granite and Parakeet</p>
+<p class="vu">CER (%)</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>Granite</span><span><i style="background:var(--s2)"></i>Parakeet</span></div>
+<div class="vgroup"><div class="vlabel">Conversation, no padding</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:73.72%;background:var(--s1)" title="Conversation, no padding / Granite: 9.99%"></span></div><span class="vval">9.99%</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:86.56%;background:var(--s2)" title="Conversation, no padding / Parakeet: 11.73%"></span></div><span class="vval">11.73%</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Conversation, 0.5 s padding</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="Conversation, 0.5 s padding / Granite: 13.03%"></span></div><span class="vval">13.03%</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:94.01%;background:var(--s2)" title="Conversation, 0.5 s padding / Parakeet: 12.74%"></span></div><span class="vval">12.74%</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">Continuous audio, 0.5 s padding</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:32.17%;background:var(--s1)" title="Continuous audio, 0.5 s padding / Granite: 4.36%"></span></div><span class="vval">4.36%</span></div>
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:32.40%;background:var(--s2)" title="Continuous audio, 0.5 s padding / Parakeet: 4.39%"></span></div><span class="vval">4.39%</span></div>
+</div></div>
+<details><summary>Show as a table</summary><table><thead><tr><th></th><th>Granite</th><th>Parakeet</th></tr></thead><tbody><tr><td>Conversation, no padding</td><td>9.99%</td><td>11.73%</td></tr><tr><td>Conversation, 0.5 s padding</td><td>13.03%</td><td>12.74%</td></tr><tr><td>Continuous audio, 0.5 s padding</td><td>4.36%</td><td>4.39%</td></tr></tbody></table></details>
+</figure>
+<p>ReazonSpeech clips contain fragments of the neighboring utterances that are not in the reference captions. Granite does not transcribe fragments at the very edge of its input; with padding they are no longer at the edge, so it transcribes them, and that looks like more errors. On segments cut from long continuous recordings, which is what the app actually handles, there is no difference between the two.</p>
+<h2>Finally, reading my own recordings side by side</h2>
+<p>With no difference on public data, I read the two transcripts side by side for 6 of my own recordings (2 h 10 min in total).</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>What I looked at</th><th>Granite</th><th>Parakeet</th></tr></thead>
+<tbody>
+<tr><th>Fast, overlapping speech</th><td>Drops phrases</td><td>Rarely drops them</td></tr>
+<tr><th>Backchannel-only segments (11)</th><td>Wrote none of them</td><td>Wrote them</td></tr>
+<tr><th>Japanese written as an English sentence</th><td>3 segments</td><td>None</td></tr>
+<tr><th>Numbers and Latin-script names</th><td>Accurate</td><td>Sometimes garbled</td></tr>
+</tbody></table></div>
+<p>Backchannels and overlapping speech matter in a record of a conversation. Granite was better on numbers and names, but overall Parakeet missed less.</p>
+<h2>Conclusion: stay with Parakeet</h2>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>Model</th><th>Good at</th><th>Weak at</th><th>Speed</th></tr></thead>
+<tbody>
+<tr><th>Parakeet</th><td>Conversation, backchannels, overlapping speech</td><td>Slightly behind Apple on read speech</td><td>Fast (258 min in 118 s)</td></tr>
+<tr><th>Apple</th><td>Read speech; no model to ship</td><td>Returns nothing on conversation, adds greetings nobody said</td><td>Medium (258 min in 631 s)</td></tr>
+<tr><th>Granite</th><td>Speed, numbers and Latin-script names</td><td>Backchannels, overlapping speech, switching to English</td><td>Fastest (10 min in 2.1 s on iPhone 16)</td></tr>
+<tr><th>Voxtral</th><td>Read-speech accuracy (2400 ms)</td><td>Slow, large model (3.6 GB)</td><td>Slow (56.5 min in 2,067 s)</td></tr>
+</tbody></table></div>
+<p>The app stays on Parakeet. It is the most accurate on conversation and does not drop backchannels. I kept the Core ML conversion of Granite as a fallback in case speed becomes a problem.</p>
+<h2>Summary</h2>
+<ul><li>Compare speech recognizers on evaluation data close to the audio your app handles. For conversation, use conversational audio such as ReazonSpeech. Read speech (FLEURS) ranked them the other way round</li><li>Match the preprocessing: how segments are cut and how much silence is padded. 0.5 s of silence moved the error rate by 3 points</li><li>If public data shows no difference, read transcripts of your own recordings side by side. Missing backchannels and greetings nobody said barely show up in the error rate</li></ul>
+<aside class="promo"><img src="../../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>These measurements come from building Liner Notes, an iPhone diary app. Liner Notes turns the day’s conversations into text on your iPhone and leaves a diary draft for you in the evening. The diary and automatic records are free.</p><a class="promo-cta" href="https://apps.apple.com/us/app/id6787426245">Get it on the App Store</a></div></aside>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../../../en/">Liner Notes</a>
+    <a href="../../../en/blog/">Engineering notes</a>
+    <a href="../../../en/support.html">Support</a>
+    <a href="../../../en/privacy.html">Privacy</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">Company</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>

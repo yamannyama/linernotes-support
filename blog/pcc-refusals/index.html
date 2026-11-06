@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した｜Liner Notes</title>
+<meta name="description" content="Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
+<meta name="author" content="Aves Inc.">
+<link rel="canonical" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
+<link rel="alternate" hreflang="en" href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">
+<link rel="alternate" hreflang="ja" href="https://linernotes.aves.ltd/blog/pcc-refusals/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Liner Notes">
+<meta property="og:title" content="Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した">
+<meta property="og:description" content="Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://linernotes.aves.ltd/blog/pcc-refusals/">
+<meta property="og:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した">
+<meta name="twitter:description" content="Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。">
+<meta name="twitter:image" content="https://linernotes.aves.ltd/assets/hero-poster.jpg">
+<meta name="theme-color" content="#151009">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/favicon-180.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Apple の PCC は本番のリクエストの10.6%を「不適切」として拒否した","description":"Apple の Private Cloud Compute は、本番614回のリクエストの10.6%を「不適切」として拒否し、9.6%をレート制限で止めた。起きた問題と作り直した設計。","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"ja","author":{"@type":"Organization","name":"Aves Inc.","url":"https://www.aves.ltd/"},"publisher":{"@type":"Organization","name":"Aves Inc."},"mainEntityOfPage":"https://linernotes.aves.ltd/blog/pcc-refusals/"}
+</script>
+<style>
+:root{--night:#151009;--espresso:#1E1813;--surface:#29211A;--cream:#EAE0CF;--latte:#A3947F;--copper:#C98F5F;--copper-l:#E6B98A;--copper-d:#845733;--hairline:rgba(201,143,95,.26);--mincho:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--night);color:var(--cream);font-family:var(--mincho);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--copper-d);color:var(--cream)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.34em;color:var(--copper);text-transform:uppercase}
+nav{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;transition:background .4s ease,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(21,16,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--hairline)}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;letter-spacing:.14em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.nav-cta{font-size:12.5px;letter-spacing:.1em;color:var(--copper-l);border:1px solid var(--hairline);padding:8px 18px;border-radius:99px;transition:all .3s}
+.nav-cta:hover{background:var(--copper);color:var(--night);border-color:var(--copper)}
+.page-head{padding:clamp(120px,18vw,170px) 0 0;text-align:center}
+.page-head h1{font-size:clamp(24px,4.4vw,38px);font-weight:600;letter-spacing:.04em;line-height:1.6;margin-top:18px}
+.page-head .meta{margin-top:18px;font-size:12px;letter-spacing:.08em;color:var(--copper-l)}
+.page-head .meta a{text-decoration:underline;text-underline-offset:3px}
+article{padding:clamp(40px,6vw,64px) 0 clamp(60px,9vw,100px);font-size:clamp(14.5px,1.8vw,16px)}
+article p{margin-top:18px;color:var(--cream)}
+article h2{font-size:clamp(19px,2.8vw,24px);font-weight:600;letter-spacing:.04em;line-height:1.65;margin-top:clamp(44px,7vw,64px);padding-top:22px;border-top:1px solid var(--hairline)}
+article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;color:var(--copper-l);background:rgba(201,143,95,.08);padding:1px 6px;border-radius:6px}
+.tablewrap{margin:22px 0 6px;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--hairline);border-radius:14px;background:rgba(41,33,26,.3)}
+table.art{border-collapse:collapse;width:100%;min-width:520px;font-size:13px;line-height:1.7}
+table.art th,table.art td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--hairline);text-align:left}
+table.art thead th{font-size:11px;letter-spacing:.14em;color:var(--copper);font-weight:600;white-space:nowrap;background:rgba(21,16,9,.5)}
+table.art tbody th{font-weight:600;color:var(--cream);white-space:nowrap}
+table.art td{color:var(--latte);white-space:nowrap}
+table.art tr:last-child th,table.art tr:last-child td{border-bottom:0}
+.final{text-align:center;padding:0 0 clamp(60px,9vw,100px)}
+.final h2{font-size:clamp(22px,4vw,32px);font-weight:600;letter-spacing:.06em;line-height:1.6}
+.final p{margin-top:16px;color:var(--latte);font-size:14px}
+.cta-row{margin-top:30px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;align-items:center}
+.cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:15px;letter-spacing:.12em;padding:16px 34px;border-radius:99px;font-weight:600;box-shadow:0 10px 34px rgba(201,143,95,.28)}
+footer{border-top:1px solid var(--hairline);padding:36px 24px 46px;text-align:center;font-size:12px;color:var(--latte)}
+footer .links{display:flex;gap:26px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+footer a:hover{color:var(--copper-l)}
+
+/* 2026-11-05: 箇条書き、表の折り返し、記事末のバナー、一覧 */
+article ul,article ol{margin-top:16px;padding-left:1.4em;color:var(--cream)}
+article li{margin:7px 0}
+table.art td{white-space:normal;min-width:6.5em}
+.promo{display:flex;gap:18px;align-items:flex-start;margin-top:44px;padding:22px 22px 24px;border:1px solid var(--hairline);border-radius:18px;background:linear-gradient(180deg,rgba(201,143,95,.10),rgba(41,33,26,.35))}
+.promo img{width:56px;height:56px;border-radius:13px;flex:none}
+.promo p{margin-top:6px !important;font-size:14px;color:var(--latte) !important}
+.promo .promo-name{margin-top:0 !important;font-size:16px;letter-spacing:.08em;color:var(--cream) !important}
+.promo-cta{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--copper-l),var(--copper));color:#241708;font-size:13.5px;letter-spacing:.1em;padding:10px 22px;border-radius:99px;font-weight:600}
+.posts{list-style:none;padding:0;margin-top:clamp(28px,5vw,44px)}
+.posts li{border-top:1px solid var(--hairline);padding:24px 2px}
+.posts li:last-child{border-bottom:1px solid var(--hairline)}
+.posts a.t{font-size:clamp(17px,2.4vw,20px);font-weight:600;line-height:1.6;color:var(--cream)}
+.posts a.t:hover{color:var(--copper-l)}
+.posts p{margin-top:8px !important;font-size:13.5px;color:var(--latte) !important}
+.posts .d{font-size:12px;color:var(--copper-l);letter-spacing:.06em}
+
+.viz{margin:26px 0 22px;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--viz-track:rgba(127,127,127,.12);--viz-ref:rgba(127,127,127,.75)}
+@media (prefers-color-scheme: dark){:root:where(:not([data-theme="light"])) .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}}
+:root[data-theme="dark"] .viz{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz-dark .viz,.viz.viz-dark{--s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--viz-track:rgba(255,255,255,.07);--viz-ref:rgba(255,255,255,.55)}
+.viz .vt{font-size:14px;font-weight:600;margin:0 0 4px}
+.viz .vu{font-size:12px;opacity:.7;margin:0 0 10px}
+.viz .vlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;margin:0 0 10px}
+.viz .vlegend span{display:inline-flex;align-items:center;gap:6px}
+.viz .vlegend i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.viz .vgroup{display:grid;grid-template-columns:minmax(6.5em,30%) 1fr;gap:0 12px;align-items:center;padding:6px 0;border-top:1px solid rgba(127,127,127,.15)}
+.viz .vgroup:first-of-type{border-top:0}
+.viz .vlabel{font-size:13px;line-height:1.45}
+.viz .vbars{display:grid;gap:4px}
+.viz .vrow{display:grid;grid-template-columns:1fr minmax(4.2em,auto);gap:8px;align-items:center}
+.viz .vtrack{position:relative;height:14px;background:var(--viz-track);border-radius:0 4px 4px 0}
+.viz .vbar{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:2px}
+.viz .vref{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--viz-ref)}
+.viz .vval{font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.viz .vnote{font-size:12px;opacity:.75;margin-top:8px}
+.viz .vstack{display:flex;gap:2px;height:22px;margin:4px 0 10px}
+.viz .vstack span{display:block;height:100%}
+.viz .vstack span:first-child{border-radius:4px 0 0 4px}
+.viz .vstack span:last-child{border-radius:0 4px 4px 0}
+.viz details{margin-top:8px;font-size:12.5px}
+.viz details summary{cursor:pointer;opacity:.75}
+.viz details table{margin-top:8px}
+</style>
+</head>
+<body class="viz-dark">
+
+<nav id="nav" aria-label="global">
+  <a class="brand" href="../../"><img src="../../assets/icon.png" alt="Liner Notes" width="30" height="30">Liner Notes</a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="nav-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store</a>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="label"><a href="../../blog/">Engineering notes</a></p>
+    <h1>Apple の PCC は、本番のリクエストの10.6%を「不適切」として拒否した</h1>
+    <p class="meta">2026 年 11 月 6 日 · Liner Notes · <a href="https://linernotes.aves.ltd/en/blog/pcc-refusals/">English</a></p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+<p>日記の要約や朝の短い文章の生成を、OpenAI から Apple の Private Cloud Compute(PCC)に移しました。41日間の本番のログを数えると、614回のリクエストのうち65回(10.6%)が「不適切な内容の可能性」として断られ、59回(9.6%)が「短時間にリクエストしすぎ」で止められていました。断られたのは、普通の日記や会話の要約です。どんな失敗をして、どう作り直したかを書きます。</p>
+<h2>やりたかったこと</h2>
+<p>iPhone の中で会話を文字にする日記アプリ(Liner Notes)では、会話の要約、毎朝の短い文章(朝の一筆)、記録の題名、会話の話し手の役割を、言語モデルで作っています。最初は OpenAI の API を使っていました。</p>
+<p>2026年9月末に、これらを PCC に移しました。PCC は、Apple が自社のサーバーで動かす言語モデルを、iOS の Foundation Models フレームワークから呼べる仕組みです。アプリ側の費用はかからず、リクエストの内容は Apple のサーバーに残りません。会話の内容を扱うアプリにとって、両方とも大きな利点です。</p>
+<h2>本番のログを数えてみた</h2>
+<p>要約が付かないメモがあることに気づき、本番のログ(自分の iPhone、41日分)を数えました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>リクエスト</th><th>失敗</th><th>「不適切」として拒否</th><th>短時間のリクエストしすぎ(レート制限)</th><th>1日の上限</th><th>取り消し、その他</th></tr></thead>
+<tbody>
+<tr><th>614回</th><td>130回(21%)</td><td>65回(10.6%)</td><td>59回(9.6%)</td><td>0回</td><td>6回</td></tr>
+</tbody></table></div>
+<figure class="viz" role="group" aria-label="本番のリクエスト614回の内訳(41日間)">
+<p class="vt">本番のリクエスト614回の内訳(41日間)</p>
+<div class="vlegend"><span><i style="background:var(--s1)"></i>成功 484回(78.8%)</span><span><i style="background:var(--s2)"></i>「不適切」として拒否 65回(10.6%)</span><span><i style="background:var(--s3)"></i>レート制限 59回(9.6%)</span><span><i style="background:var(--s4)"></i>取り消し、その他 6回(1.0%)</span></div>
+<div class="vstack"><span style="width:78.83%;background:var(--s1)" title="成功: 484回(78.8%)"></span><span style="width:10.59%;background:var(--s2)" title="「不適切」として拒否: 65回(10.6%)"></span><span style="width:9.61%;background:var(--s3)" title="レート制限: 59回(9.6%)"></span><span style="width:0.98%;background:var(--s4)" title="取り消し、その他: 6回(1.0%)"></span></div>
+<details><summary>表で見る</summary><table><thead><tr><th>項目</th><th>値</th><th>割合</th></tr></thead><tbody><tr><td>成功</td><td>484回</td><td>78.8%</td></tr><tr><td>「不適切」として拒否</td><td>65回</td><td>10.6%</td></tr><tr><td>レート制限</td><td>59回</td><td>9.6%</td></tr><tr><td>取り消し、その他</td><td>6回</td><td>1.0%</td></tr></tbody></table></details>
+</figure>
+<p>拒否のメッセージは3種類ありました。</p>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>メッセージ</th><th>回数</th></tr></thead>
+<tbody>
+<tr><th>Streamed response may contain sensitive or unsafe content</th><td>41</td></tr>
+<tr><th>Safety guardrail was triggered.</th><td>18</td></tr>
+<tr><th>Response may contain sensitive or unsafe content</th><td>6</td></tr>
+</tbody></table></div>
+<p>断られたのは、日記の下書きや会話の要約で、性的な内容や暴力的な内容ではありません。技術の打ち合わせの録音の要約も断られます。Apple の端末内モデルについては、普通のリクエストを断りすぎるという報告が開発者フォーラムに何度も出ています。サーバー側の PCC でも同じことが起きていました。</p>
+<p>断られるときは時間もかかります。成功は1〜3秒で返りますが、拒否は7.6〜12.7秒かかりました。返事を流し始めてから、途中でフィルタが止めるためです。</p>
+<figure class="viz" role="group" aria-label="返事が返るまでの時間">
+<p class="vt">返事が返るまでの時間</p>
+<p class="vu">秒(範囲の中央で描いている)</p>
+<div class="vgroup"><div class="vlabel">成功</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:18.85%;background:var(--s1)" title="成功: 1〜3秒"></span></div><span class="vval">1〜3秒</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">拒否</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.15%;background:var(--s1)" title="拒否: 7.6〜12.7秒"></span></div><span class="vval">7.6〜12.7秒</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th>項目</th><th>値</th></tr></thead><tbody><tr><td>成功</td><td>1〜3秒</td></tr><tr><td>拒否</td><td>7.6〜12.7秒</td></tr></tbody></table></details>
+</figure>
+<h2>起きた問題</h2>
+<p>拒否とレート制限によって、アプリで4つの問題が起きていました。</p>
+<p>1つ目は、要約が黙って欠けたことです。PCC が失敗すると要約が作られず、「文字起こしはあるのに要約が無いメモ」が残りました。利用者には、アプリの不具合に見えます。</p>
+<p>2つ目は、安全装置が本番の PCC を止めたことです。生成の途中でアプリが落ちたら、その経路を止める安全装置を入れていました。ところが、バックグラウンドで期限切れになっただけの回を「落ちた」と数え、10月16日に本番で PCC がまるごと止まりました。</p>
+<p>3つ目は、1日の上限に当たっている最中に記録を消したことです。開発用の iPhone で人物像を一括で作り直したところ、1日およそ700回で上限に達し、以後のリクエストがすべて失敗しました。「古い記録を消してから作り直す」処理を上限中に走らせたので、消したあと作り直せず、記録が7件に減りました。</p>
+<p>4つ目は、毎朝の一括生成がレート制限に当たっていたことです。レート制限は、直前60秒のリクエストが8〜10回になると当たります。朝の一筆を7時台にまとめて作っていたので、本番の7時台は14回中3回しか成功していませんでした。</p>
+<figure class="viz" role="group" aria-label="時刻ごとの成功率(本番、リクエストが10回以上あった時刻)">
+<p class="vt">時刻ごとの成功率(本番、リクエストが10回以上あった時刻)</p>
+<p class="vu">%</p>
+<div class="vgroup"><div class="vlabel">0時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:83.00%;background:var(--s1)" title="0時: 83%(10/12)"></span></div><span class="vval">83%(10/12)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">7時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:21.00%;background:var(--s1)" title="7時: 21%(3/14)"></span></div><span class="vval">21%(3/14)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">8時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:79.00%;background:var(--s1)" title="8時: 79%(38/48)"></span></div><span class="vval">79%(38/48)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">9時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:70.00%;background:var(--s1)" title="9時: 70%(14/20)"></span></div><span class="vval">70%(14/20)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">10時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:53.00%;background:var(--s1)" title="10時: 53%(60/114)"></span></div><span class="vval">53%(60/114)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">12時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:82.00%;background:var(--s1)" title="12時: 82%(31/38)"></span></div><span class="vval">82%(31/38)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">13時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:86.00%;background:var(--s1)" title="13時: 86%(38/44)"></span></div><span class="vval">86%(38/44)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">14時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:96.00%;background:var(--s1)" title="14時: 96%(22/23)"></span></div><span class="vval">96%(22/23)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">16時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:97.00%;background:var(--s1)" title="16時: 97%(31/32)"></span></div><span class="vval">97%(31/32)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">18時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:76.00%;background:var(--s1)" title="18時: 76%(25/33)"></span></div><span class="vval">76%(25/33)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">19時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:82.00%;background:var(--s1)" title="19時: 82%(28/34)"></span></div><span class="vval">82%(28/34)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">20時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:93.00%;background:var(--s1)" title="20時: 93%(14/15)"></span></div><span class="vval">93%(14/15)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">21時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:97.00%;background:var(--s1)" title="21時: 97%(31/32)"></span></div><span class="vval">97%(31/32)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">22時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.00%;background:var(--s1)" title="22時: 90%(54/60)"></span></div><span class="vval">90%(54/60)</span></div>
+</div></div>
+<div class="vgroup"><div class="vlabel">23時</div><div class="vbars">
+<div class="vrow"><div class="vtrack"><span class="vbar" style="width:90.00%;background:var(--s1)" title="23時: 90%(55/61)"></span></div><span class="vval">90%(55/61)</span></div>
+</div></div>
+<details><summary>表で見る</summary><table><thead><tr><th>項目</th><th>値</th></tr></thead><tbody><tr><td>0時</td><td>83%(10/12)</td></tr><tr><td>7時</td><td>21%(3/14)</td></tr><tr><td>8時</td><td>79%(38/48)</td></tr><tr><td>9時</td><td>70%(14/20)</td></tr><tr><td>10時</td><td>53%(60/114)</td></tr><tr><td>12時</td><td>82%(31/38)</td></tr><tr><td>13時</td><td>86%(38/44)</td></tr><tr><td>14時</td><td>96%(22/23)</td></tr><tr><td>16時</td><td>97%(31/32)</td></tr><tr><td>18時</td><td>76%(25/33)</td></tr><tr><td>19時</td><td>82%(28/34)</td></tr><tr><td>20時</td><td>93%(14/15)</td></tr><tr><td>21時</td><td>97%(31/32)</td></tr><tr><td>22時</td><td>90%(54/60)</td></tr><tr><td>23時</td><td>90%(55/61)</td></tr></tbody></table></details>
+</figure>
+<p>朝の7時台と、リクエストが最も多かった10時台で成功率が下がっています。どちらも、まとめて生成していた時間帯です。</p>
+<h2>拒否を減らせないか試した</h2>
+<p>拒否されるリクエストとされないリクエストで、入力の長さに違いはありませんでした(873字でも2,174字でも拒否されます)。どの言葉が拒否の引き金になっているかは分からず、指示の書き方を変えて拒否を減らす方法は見つけられていません。拒否は減らせないものとして、設計を変えることにしました。</p>
+<h2>作り直したこと</h2>
+<div class="tablewrap"><table class="art">
+<thead><tr><th>問題</th><th>直したこと</th></tr></thead>
+<tbody>
+<tr><th>要約が黙って欠ける</th><td>失敗したら端末内のモデルで作る。会話の内容は OpenAI に送らない方針なので、代わりは端末内だけ</td></tr>
+<tr><th>要約が無いと不具合に見える</th><td>文字起こしを先に保存し、要約は後から付け直す。拒否されても文字起こしは読める</td></tr>
+<tr><th>安全装置が誤作動する</th><td>バックグラウンドの期限切れは「落ちた」と数えない</td></tr>
+<tr><th>上限中に記録を消す</th><td>一括処理は1日2〜3回まで。上限中は、消してから作り直す処理を走らせない</td></tr>
+<tr><th>朝の一括生成がレート制限に当たる</th><td>生成の時刻をばらす</td></tr>
+<tr><th>どの機能が断られているか分からない</th><td>リクエストごとに、機能の名前、かかった時間、失敗の種類(拒否、レート制限、上限)をログに残す</td></tr>
+</tbody></table></div>
+<p>1日の上限は、エラーに次に使える時刻(<code>resetDate</code>)が入っていて、残りの回数も <code>quotaUsage</code> で分かります。私はこれを読んでおらず、「翌朝になっても戻らない」と悩んでいました。上限はアプリごとではなく、利用者の iCloud アカウント単位とされています。</p>
+<h2>まとめ</h2>
+<ul><li>PCC を本番に入れる前に、自分のアプリの実際のリクエストで拒否率を測る。私のアプリでは10.6%だった</li><li>拒否されたときの代わりを先に決めておく。要約なら、文字起こしを先に保存して後から付け直す</li><li>レート制限は直前60秒に8〜10回で当たる。一括生成は時刻をばらす</li><li>1日の上限に当たったら、エラーの <code>resetDate</code> を読む。上限中に、消してから作り直す処理を走らせない</li><li>リクエストごとに機能と失敗の種類を記録し、どの機能が断られているかを見えるようにする</li></ul>
+<aside class="promo"><img src="../../assets/icon.png" alt="" width="56" height="56"><div><p class="promo-name">Liner Notes</p><p>この記事は、iPhone の日記アプリ Liner Notes を作る中で測った結果です。Liner Notes は、一日の会話を iPhone の中で文字にして、夜に日記の下書きを置いてくれます。日記と自動の記録は無料で使えます。</p><a class="promo-cta" href="https://apps.apple.com/jp/app/id6787426245">App Store で入手</a></div></aside>
+  </div>
+</article>
+
+<footer>
+  <div class="links">
+    <a href="../../">Liner Notes</a>
+    <a href="../../blog/">開発ノート</a>
+    <a href="../../support.html">サポート</a>
+    <a href="../../privacy.html">プライバシーポリシー</a>
+    <a href="https://www.aves.ltd/" target="_blank" rel="noopener">運営会社</a>
+  </div>
+  © 2026 Aves Inc.
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), {passive:true});
+</script>
+</body>
+</html>
